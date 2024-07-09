@@ -297,7 +297,7 @@
                   <p>Data berhasil disimpan</p>
                 </div>
               </div>
-            </div>
+            </div> 
         </div>
            <!-- Failed Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
