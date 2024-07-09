@@ -40,109 +40,109 @@ class DashboardController extends Controller
         $dayMonthBefore = date("t", strtotime('-1 month'));
 
 
-        if ($request->month == '' && $request->year == '') {
-            $data['trafficBefore'] = $this->analytics('oneMonthBefore');
-            $data['trafficNow'] = $this->analytics('currentMonth');
+        // if ($request->month == '' && $request->year == '') {
+        //     $data['trafficBefore'] = $this->analytics('oneMonthBefore');
+        //     $data['trafficNow'] = $this->analytics('currentMonth');
 
-            if ($data['trafficBefore'] != "error") {
+        //     if ($data['trafficBefore'] != "error") {
 
-                foreach ($data['trafficBefore']->getRows() as $row) {
-                    if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
-                        array_push($data['arrMonthBefore'], $row->getMetricValues()[0]->getValue());
-                        $data['totalMonthBefore'] += $row->getMetricValues()[0]->getValue();
-                    } else {
-                        array_push($data['arrMonthBefore'], 0);
-                    }
-                }
-
-
-                do {
-                    array_push($data['arrMonthBefore'], 0);
-                } while (count($data['arrMonthBefore']) < $dayMonthBefore);
+        //         foreach ($data['trafficBefore']->getRows() as $row) {
+        //             if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
+        //                 array_push($data['arrMonthBefore'], $row->getMetricValues()[0]->getValue());
+        //                 $data['totalMonthBefore'] += $row->getMetricValues()[0]->getValue();
+        //             } else {
+        //                 array_push($data['arrMonthBefore'], 0);
+        //             }
+        //         }
 
 
-
-                foreach ($data['trafficNow']->getRows() as $row) {
-                    // print $row->getDimensionValues()[0]->getValue() . PHP_EOL;
-                    if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
-                        array_push($data['arrCurrentMonth'], $row->getMetricValues()[0]->getValue());
-                        $data['totalCurrentMonth'] += $row->getMetricValues()[0]->getValue();
-                    } else {
-                        array_push($data['arrCurrentMonth'], 0);
-                    }
-                }
-
-                do {
-                    array_push($data['arrCurrentMonth'], 0);
-                } while (count($data['arrCurrentMonth']) < $day);
-
-                $totalsTrafficBefore = $data['trafficBefore']->getTotals();
-                // echo count($totalsTrafficBefore) ; die();
-                $totalsTrafficNow = $data['trafficNow']->getTotals();
-
-                if (isset($totalsTrafficBefore) && !empty($totalsTrafficBefore)) {
-                    foreach ($totalsTrafficBefore as $row) {
-                        if (count($row->getMetricValues()) != 0) {
-                            $data['newUsersBefore'] = $row->getMetricValues()[2]->getValue();
-                            $data['totalUsersBefore'] = $row->getMetricValues()[1]->getValue();
-                        }
-                    }
-                }
-
-                // dd($totalsTrafficNow);
-                if (isset($totalsTrafficNow) && !empty($totalsTrafficNow)) {
-                    foreach ($totalsTrafficNow as $row) {
-                        // foreach ($row->getMetricValues() as $metricValue) {
-                        //     $data['totalCurrentMonth'] = $metricValue->getValue();
-                        // }
-                        if (count($row->getMetricValues()) != 0) {
-                            // $data['totalCurrentMonth'] = $row->getMetricValues()[0]->getValue();
-                            $data['newUsers'] = $row->getMetricValues()[2]->getValue();
-                            $data['totalUsers'] = $row->getMetricValues()[1]->getValue();
-                        }
-                    }
-                }
-
-                if ($data['totalMonthBefore'] > 0 && $data['totalCurrentMonth'] > 0) {
-                    $data['percentageOverTime'] = number_format((float)($data['totalMonthBefore'] - $data['totalCurrentMonth']) / $data['totalMonthBefore'] * 100, 2, '.', '');
-                }
-            }
-        } else {
-            $data['trafficNow'] = $this->analytics('filter', $request->month, $request->year);
-
-            if ($data['trafficNow'] != "error") {
-
-                foreach ($data['trafficNow']->getRows() as $row) {
-                    if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
-                        array_push($data['arrCurrentMonth'], $row->getMetricValues()[0]->getValue());
-                        $data['totalCurrentMonth'] += $row->getMetricValues()[0]->getValue();
-                    } else {
-                        array_push($data['arrCurrentMonth'], 0);
-                    }
-                }
-
-                do {
-                    array_push($data['arrCurrentMonth'], 0);
-                } while (count($data['arrCurrentMonth']) < $day);
-
-                $totalsTrafficNow = $data['trafficNow']->getTotals();
+        //         do {
+        //             array_push($data['arrMonthBefore'], 0);
+        //         } while (count($data['arrMonthBefore']) < $dayMonthBefore);
 
 
-                // dd($totalsTrafficNow);
-                if (isset($totalsTrafficNow) && !empty($totalsTrafficNow)) {
-                    foreach ($totalsTrafficNow as $row) {
-                        if (count($row->getMetricValues()) != 0) {
-                            $data['newUsers'] = $row->getMetricValues()[2]->getValue();
-                            $data['totalUsers'] = $row->getMetricValues()[1]->getValue();
-                        }
-                    }
-                }
 
-                if ($data['totalCurrentMonth'] > 0) {
-                    $data['percentageOverTime'] = 0;
-                }
-            }
-        }
+        //         foreach ($data['trafficNow']->getRows() as $row) {
+        //             // print $row->getDimensionValues()[0]->getValue() . PHP_EOL;
+        //             if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
+        //                 array_push($data['arrCurrentMonth'], $row->getMetricValues()[0]->getValue());
+        //                 $data['totalCurrentMonth'] += $row->getMetricValues()[0]->getValue();
+        //             } else {
+        //                 array_push($data['arrCurrentMonth'], 0);
+        //             }
+        //         }
+
+        //         do {
+        //             array_push($data['arrCurrentMonth'], 0);
+        //         } while (count($data['arrCurrentMonth']) < $day);
+
+        //         $totalsTrafficBefore = $data['trafficBefore']->getTotals();
+        //         // echo count($totalsTrafficBefore) ; die();
+        //         $totalsTrafficNow = $data['trafficNow']->getTotals();
+
+        //         if (isset($totalsTrafficBefore) && !empty($totalsTrafficBefore)) {
+        //             foreach ($totalsTrafficBefore as $row) {
+        //                 if (count($row->getMetricValues()) != 0) {
+        //                     $data['newUsersBefore'] = $row->getMetricValues()[2]->getValue();
+        //                     $data['totalUsersBefore'] = $row->getMetricValues()[1]->getValue();
+        //                 }
+        //             }
+        //         }
+
+        //         // dd($totalsTrafficNow);
+        //         if (isset($totalsTrafficNow) && !empty($totalsTrafficNow)) {
+        //             foreach ($totalsTrafficNow as $row) {
+        //                 // foreach ($row->getMetricValues() as $metricValue) {
+        //                 //     $data['totalCurrentMonth'] = $metricValue->getValue();
+        //                 // }
+        //                 if (count($row->getMetricValues()) != 0) {
+        //                     // $data['totalCurrentMonth'] = $row->getMetricValues()[0]->getValue();
+        //                     $data['newUsers'] = $row->getMetricValues()[2]->getValue();
+        //                     $data['totalUsers'] = $row->getMetricValues()[1]->getValue();
+        //                 }
+        //             }
+        //         }
+
+        //         if ($data['totalMonthBefore'] > 0 && $data['totalCurrentMonth'] > 0) {
+        //             $data['percentageOverTime'] = number_format((float)($data['totalMonthBefore'] - $data['totalCurrentMonth']) / $data['totalMonthBefore'] * 100, 2, '.', '');
+        //         }
+        //     }
+        // } else {
+        //     $data['trafficNow'] = $this->analytics('filter', $request->month, $request->year);
+
+        //     if ($data['trafficNow'] != "error") {
+
+        //         foreach ($data['trafficNow']->getRows() as $row) {
+        //             if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
+        //                 array_push($data['arrCurrentMonth'], $row->getMetricValues()[0]->getValue());
+        //                 $data['totalCurrentMonth'] += $row->getMetricValues()[0]->getValue();
+        //             } else {
+        //                 array_push($data['arrCurrentMonth'], 0);
+        //             }
+        //         }
+
+        //         do {
+        //             array_push($data['arrCurrentMonth'], 0);
+        //         } while (count($data['arrCurrentMonth']) < $day);
+
+        //         $totalsTrafficNow = $data['trafficNow']->getTotals();
+
+
+        //         // dd($totalsTrafficNow);
+        //         if (isset($totalsTrafficNow) && !empty($totalsTrafficNow)) {
+        //             foreach ($totalsTrafficNow as $row) {
+        //                 if (count($row->getMetricValues()) != 0) {
+        //                     $data['newUsers'] = $row->getMetricValues()[2]->getValue();
+        //                     $data['totalUsers'] = $row->getMetricValues()[1]->getValue();
+        //                 }
+        //             }
+        //         }
+
+        //         if ($data['totalCurrentMonth'] > 0) {
+        //             $data['percentageOverTime'] = 0;
+        //         }
+        //     }
+        // }
 
         return view('pages.dashboard', $data);
     }

@@ -5,6 +5,8 @@ use App\Http\Controllers\HelperController;
 use App\Http\Controllers\LaporanTahunanController;
 use App\Http\Controllers\InsightContoller;
 use App\Http\Controllers\Pages\BerandaController;
+use App\Http\Controllers\Pages\JobVacancyController;
+use App\Http\Controllers\Pages\NewsUpdateController;
 use App\Http\Controllers\Pages\ContactUsController;
 use App\Http\Controllers\Pages\DashboardController;
 use App\Http\Controllers\Pages\FooterController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\Pages\PengandaanTenderUmumController;
 use App\Http\Controllers\Pages\ProdukDanLayananController;
 use App\Http\Controllers\Pages\TentangKamiController;
 use App\Http\Controllers\Pages\WhistleblowingController;
+use App\Http\Controllers\pages\TrainingCourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,23 +33,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('guest')->group(function () {
-    Route::get('/', [AuthController::class, 'index'])
-        ->name('login');
 
-    Route::post('/login', [AuthController::class, 'store'])
-        ->name('login-action');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'destroy'])
-        ->name('logout');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
-
-    Route::post('/ubah-password', [BerandaController::class, 'updatePassword'])
-        ->name('ubah-password');
 
     //*beranda
 
@@ -68,106 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/beranda-store-youtube', [BerandaController::class, 'storeYoutube'])
         ->name('beranda-store-youtube');
 
-    //Tentang Kami
-    Route::get('/company-overview/{id}', [TentangKamiController::class, 'sekilasPerusahaan'])
-        ->name('company-overview');
-
-    Route::post('/store-company-overview', [TentangKamiController::class, 'storeSekilasPerusahaan'])
-        ->name('store-company-overview');
-
-    Route::get('/vision-mission/{id}', [TentangKamiController::class, 'visiMisi'])
-        ->name('vision-mission');
-
-    Route::post('/store-visi-misi', [TentangKamiController::class, 'storeVisiMisi'])
-        ->name('store-visi-misi');
-
-    Route::get('/edit-visi-misi/{id}', [TentangKamiController::class, 'editVisiMisi'])
-        ->name('edit-visi-misi');
-
-    Route::post('/update-title-visi-misi', [TentangKamiController::class, 'updateTitleVisiMisi'])
-        ->name('update-title-visi-misi');
-
-    Route::post('/update-visi-misi', [TentangKamiController::class, 'updateVisiMisi'])
-        ->name('update-visi-misi');
-
-    Route::put('/update-visi-misi-detail', [TentangKamiController::class, 'updateVisiMisiDetail'])
-        ->name('update-visi-misi-detail');
-
-    Route::get('/edit-list-detail-tk/{id}', [TentangKamiController::class, 'editListItemDetail'])
-        ->name('edit-list-detail-tk');
-
-    Route::get('/edit-profile-manajemen/{id}', [TentangKamiController::class, 'editProfileManajemen'])
-        ->name('edit-profile-manajemen');
-
-    Route::get('/profile-manajemen-edit-list/{id}', [TentangKamiController::class, 'modalProfileManajemen'])
-        ->name('profile-manajemen-edit-list');
-
-    Route::put('/update-profile-manajemen', [TentangKamiController::class, 'updateProfileManajemen'])
-        ->name('update-profile-manajemen');
-
-    Route::get('/history/{id}', [TentangKamiController::class, 'sejarahKami'])
-        ->name('history');
-
-    Route::post('/store-history', [TentangKamiController::class, 'storeSejarahKami'])
-        ->name('store-history');
-
-    Route::put('/update-history', [TentangKamiController::class, 'updateSejarahKamiDetail'])
-        ->name('update-history');
-
-    Route::get('/management-profile/{id}', [TentangKamiController::class, 'profileManajemen'])
-        ->name('management-profile');
-
-    Route::post('/store-profil-manajemen', [TentangKamiController::class, 'storeProfilManajemen'])
-        ->name('store-profil-manajemen');
-
-    Route::get('/subsidiaries/{id}', [TentangKamiController::class, 'anakPerusahaan'])
-        ->name('subsidiaries');
-
-    Route::post('/store-anak-perusahaan', [TentangKamiController::class, 'storeAnakPerusahaan'])
-        ->name('store-anak-perusahaan');
-
-    Route::get('/award-and-certificate/{id}', [TentangKamiController::class, 'penghargaanSertifikat'])
-        ->name('award-and-certificate');
-
-    Route::post('/store-penghargaan-dan-sertifikat', [TentangKamiController::class, 'storePenghargaanSertifikat'])
-        ->name('store-penghargaan-dan-sertifikat');
-
-    Route::get('/edit-penghargaan-dan-sertifikat/{id}', [TentangKamiController::class, 'editPernghargaanSertifikat'])
-        ->name('edit-penghargaan-dan-sertifikat');
-
-    Route::put('/update-penghargaan-dan-sertifikat', [TentangKamiController::class, 'updatePernghargaanSertifikat'])
-        ->name('update-penghargaan-dan-sertifikat');
-
-    Route::put('/beranda-update-anggota-holding', [BerandaController::class, 'updateAnggotaHolding'])
-        ->name('beranda-update-anggota-holding');
-
-    //helper
-    Route::get('/pages-list-detail-delete/{id}', [HelperController::class, 'deleteListItemDetail'])
-        ->name('pages-list-detail-delete');
-
-    Route::get('/edit-list-detail/{id}', [HelperController::class, 'editListItemDetail'])
-        ->name('edit-list-detail');
-
-    Route::post('/store-page-header', [HelperController::class, 'storePageHeader'])
-        ->name('store-page-header');
-
-    Route::post('/store-side-list', [HelperController::class, 'storeSideList'])
-        ->name('store-side-list');
-
-    Route::post('/update-side-list', [HelperController::class, 'updateOnlySideList'])
-        ->name('update-side-list');
-
-    Route::post('/store-anggota-holding', [HelperController::class, 'storeAnggotaHolding'])
-        ->name('store-anggota-holding');
-
-    Route::get('/delete-side-list/{id}', [HelperController::class, 'deleteSideList'])
-        ->name('delete-side-list');
-
-    Route::get('/anggota-holding-delete/{id}', [HelperController::class, 'deleteAnggotaHolding'])
-        ->name('anggota-holding-delete');
-
-    Route::get('/edit-list-anggot-holding/{id}', [BerandaController::class, 'editListAnggotaHolding'])
-        ->name('edit-list-anggot-holding');
+    
 
 
     //Produk dan Layanan
@@ -379,4 +267,242 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/newsDetail', [HelperController::class, 'newsDetail'])
         ->name('newsDetail');
+
+//traning kerja
+
+        // Awal
+
+            Route::middleware('guest')->group(function () {
+                Route::get('/', [AuthController::class, 'index'])
+                    ->name('login');
+
+                Route::post('/login', [AuthController::class, 'store'])
+                    ->name('login-action');
+            });
+
+            Route::middleware('auth')->group(function () {
+                Route::post('logout', [AuthController::class, 'destroy'])
+                    ->name('logout');
+
+            Route::get('/dashboard', [DashboardController::class, 'index'])
+                ->name('dashboard');
+
+            Route::post('/ubah-password', [BerandaController::class, 'updatePassword'])
+                ->name('ubah-password');
+
+        //Tentang Kami
+            Route::get('/company-overview/{id}', [TentangKamiController::class, 'sekilasPerusahaan'])
+                ->name('company-overview');
+
+            Route::post('/store-company-overview', [TentangKamiController::class, 'storeSekilasPerusahaan'])
+                ->name('store-company-overview');
+
+            Route::get('/vision-mission/{id}', [TentangKamiController::class, 'visiMisi'])
+                ->name('vision-mission');
+
+            Route::post('/store-visi-misi', [TentangKamiController::class, 'storeVisiMisi'])
+                ->name('store-visi-misi');
+
+            Route::get('/edit-visi-misi/{id}', [TentangKamiController::class, 'editVisiMisi'])
+                ->name('edit-visi-misi');
+
+            Route::post('/update-title-visi-misi', [TentangKamiController::class, 'updateTitleVisiMisi'])
+                ->name('update-title-visi-misi');
+
+            Route::post('/update-visi-misi', [TentangKamiController::class, 'updateVisiMisi'])
+                ->name('update-visi-misi');
+
+            Route::put('/update-visi-misi-detail', [TentangKamiController::class, 'updateVisiMisiDetail'])
+                ->name('update-visi-misi-detail');
+
+            Route::get('/edit-list-detail-tk/{id}', [TentangKamiController::class, 'editListItemDetail'])
+                ->name('edit-list-detail-tk');
+
+            Route::get('/edit-profile-manajemen/{id}', [TentangKamiController::class, 'editProfileManajemen'])
+                ->name('edit-profile-manajemen');
+
+            Route::get('/profile-manajemen-edit-list/{id}', [TentangKamiController::class, 'modalProfileManajemen'])
+                ->name('profile-manajemen-edit-list');
+
+            Route::put('/update-profile-manajemen', [TentangKamiController::class, 'updateProfileManajemen'])
+                ->name('update-profile-manajemen');
+
+            Route::get('/history/{id}', [TentangKamiController::class, 'sejarahKami'])
+                ->name('history');
+
+            Route::post('/store-history', [TentangKamiController::class, 'storeSejarahKami'])
+                ->name('store-history');
+
+            Route::put('/update-history', [TentangKamiController::class, 'updateSejarahKamiDetail'])
+                ->name('update-history');
+
+            Route::get('/management-profile/{id}', [TentangKamiController::class, 'profileManajemen'])
+                ->name('management-profile');
+
+            Route::post('/store-profil-manajemen', [TentangKamiController::class, 'storeProfilManajemen'])
+                ->name('store-profil-manajemen');
+
+            Route::get('/subsidiaries/{id}', [TentangKamiController::class, 'anakPerusahaan'])
+                ->name('subsidiaries');
+
+            Route::post('/store-anak-perusahaan', [TentangKamiController::class, 'storeAnakPerusahaan'])
+                ->name('store-anak-perusahaan');
+
+            Route::get('/award-and-certificate/{id}', [TentangKamiController::class, 'penghargaanSertifikat'])
+                ->name('award-and-certificate');
+
+            Route::post('/store-penghargaan-dan-sertifikat', [TentangKamiController::class, 'storePenghargaanSertifikat'])
+                ->name('store-penghargaan-dan-sertifikat');
+
+            Route::get('/edit-penghargaan-dan-sertifikat/{id}', [TentangKamiController::class, 'editPernghargaanSertifikat'])
+                ->name('edit-penghargaan-dan-sertifikat');
+
+            Route::put('/update-penghargaan-dan-sertifikat', [TentangKamiController::class, 'updatePernghargaanSertifikat'])
+                ->name('update-penghargaan-dan-sertifikat');
+
+            Route::put('/beranda-update-anggota-holding', [BerandaController::class, 'updateAnggotaHolding'])
+                ->name('beranda-update-anggota-holding');
+
+        //helper
+            Route::get('/pages-list-detail-delete/{id}', [HelperController::class, 'deleteListItemDetail'])
+                ->name('pages-list-detail-delete');
+
+            Route::get('/edit-list-detail/{id}', [HelperController::class, 'editListItemDetail'])
+                ->name('edit-list-detail');
+
+            Route::post('/store-page-header', [HelperController::class, 'storePageHeader'])
+                ->name('store-page-header');
+
+            Route::post('/store-side-list', [HelperController::class, 'storeSideList'])
+                ->name('store-side-list');
+
+            Route::post('/update-side-list', [HelperController::class, 'updateOnlySideList'])
+                ->name('update-side-list');
+
+            Route::post('/store-anggota-holding', [HelperController::class, 'storeAnggotaHolding'])
+                ->name('store-anggota-holding');
+
+            Route::get('/delete-side-list/{id}', [HelperController::class, 'deleteSideList'])
+                ->name('delete-side-list');
+
+            Route::get('/anggota-holding-delete/{id}', [HelperController::class, 'deleteAnggotaHolding'])
+                ->name('anggota-holding-delete');
+
+            Route::get('/edit-list-anggot-holding/{id}', [BerandaController::class, 'editListAnggotaHolding'])
+                ->name('edit-list-anggot-holding');
+
+    // training course
+
+            Route::get('/traningcourse/{id}', [TrainingCourseController::class, 'traningcourse'])
+                ->name('traningcourse');
+
+            Route::get('/get-datacourse-filters', [TrainingCourseController::class, 'getFilters'])
+                ->name('get-datacourse-filters');
+
+            Route::get('/get-data-course', [TrainingCourseController::class, 'getDataCourses'])
+                ->name('get-data-course');
+
+            Route::get('/get-view-store-traningcourse/{id}', [TrainingCourseController::class, 'ViewsStoretraningcourse'])
+                ->name('get-view-store-traningcourse');
+
+            Route::post('/store-course-endpoint', [TrainingCourseController::class, 'storeCourseEndpoint'])->name('store-course-endpoint');
+
+            Route::post('/update-course-endpoint', [TrainingCourseController::class, 'updateCourseEndpoint'])->name('update-course-endpoint');
+
+
+
+            Route::post('/store-course', [TrainingCourseController::class, 'storeCourse'])
+                ->name('store-course');
+
+            Route::get('/edit-traningcourse/{id}', [TrainingCourseController::class, 'editTraningCourse'])
+                ->name('edit-traningcourse');
+
+
+            Route::post('/update-traning-course', [TrainingCourseController::class, 'updateTraningCourse'])
+                ->name('update-traning-course');
+
+            Route::get('/edit-traningcourse-detail/{id}', [TrainingCourseController::class, 'editTraningCourseDetail'])
+                ->name('edit-traningcourse-detail');
+
+            Route::put('/update-traning-course-detail', [TrainingCourseController::class, 'updateTraningCourseDetail'])
+                ->name('update-traning-course-detail');    
+    
+    
+    // job vacancy
+
+            Route::get('/jobvacancy/{id}', [JobVacancyController::class, 'jobVacancy'])
+                ->name('jobvacancy');
+
+            Route::get('/get-data-job', [JobVacancyController::class, 'getDataJobFilter'])
+                ->name('get-data-job');
+
+            Route::get('/get-filters-job', [JobVacancyController::class, 'getDropdownJob'])
+                ->name('get-filters-job');
+
+            Route::get('/get-view-store-jobvacancy/{id}', [JobVacancyController::class, 'getViewStoreJobvacancy'])
+                ->name('get-view-store-jobvacancy');
+
+            Route::get('/delete-master-job-cavancy/{id}', [JobVacancyController::class, 'deleteJobVacancyMaster'])
+                ->name('delete-master-job-cavancy');
+
+            Route::post('/store-jobvacancy', [JobVacancyController::class, 'storeJobVacancy'])
+                ->name('store-jobvacancy');
+
+
+            Route::get('/edit-jobvacancy/{id}', [JobVacancyController::class, 'editJobVacancy'])
+                ->name('edit-jobvacancy');
+
+            Route::post('/update-job-vacancy', [JobVacancyController::class, 'updateJobVacancy'])
+                ->name('update-job-vacancy');
+
+            Route::get('/delete-master-job-cavancy-detail/{id}', [JobVacancyController::class, 'deleteJobVacancyDetail'])
+                ->name('delete-master-job-cavancy-detail');
+
+
+
+            Route::get('/edit-jobvacancy-detail/{id}', [JobVacancyController::class, 'editJobVacancyDetail'])
+                ->name('edit-jobvacancy-detail');
+
+            Route::put('/update-job-vacancy-detail', [JobVacancyController::class, 'updateJobVacancyDetail'])
+                ->name('update-job-vacancy-detail');
+            
+    
+
+    // news & update
+
+            Route::get('/newsupdate/{id}', [NewsUpdateController::class, 'newsUpdate'])
+                ->name('newsupdate');
+            
+            Route::get('/get-data-news', [NewsUpdateController::class, 'getDataNewsFilter'])
+                ->name('get-data-news');
+
+            Route::get('/get-filters-news', [NewsUpdateController::class, 'getDropdownNews'])
+                ->name('get-filters-news');
+        
+           
+            Route::get('/get-view-store-news/{id}', [NewsUpdateController::class, 'getViewStoreNews'])
+                ->name('get-view-store-news');
+
+                Route::post('/store-news-update', [NewsUpdateController::class, 'storeNewsUpdate'])
+                ->name('store-news-update');
+
+
+
+            Route::get('/edit-newsupdate/{id}', [NewsUpdateController::class, 'editNewsUpdate'])
+                ->name('edit-newsupdate');
+
+            Route::post('/update-news-update', [NewsUpdateController::class, 'updateNewsUpdate'])
+                ->name('update-news-update');
+
+            // Route::get('/delete-master-job-cavancy-detail/{id}', [JobVacancyController::class, 'deleteJobVacancyDetail'])
+            //     ->name('delete-master-job-cavancy-detail');
+
+
+
+            Route::get('/edit-NewsUpdate-detail/{id}', [NewsUpdateController::class, 'editNewsUpdateDetail'])
+                ->name('edit-NewsUpdate-detail');
+
+            Route::put('/update-news-update-detail', [NewsUpdateController::class, 'updateNewsUpdateDetail'])
+                ->name('update-news-update-detail');
+            
 });

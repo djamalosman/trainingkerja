@@ -43,6 +43,7 @@
                     <input type="hidden" name="id_content_order" value="1">
                     <input type="hidden" name="idSP" value="{{base64_encode($dataItem->id ?? '') }}">
                     <div class="row">
+                        @if (count($dataTk) < 1)
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -78,6 +79,8 @@
                             </div>
                             <button type="button" onclick="validatePrompt('background-form')" class="btn btn-danger start"> Save </button>
                         </div>
+                        @endif
+                        
                     </div>
                 </form>
                 <div class="container-fluid mt-4">
