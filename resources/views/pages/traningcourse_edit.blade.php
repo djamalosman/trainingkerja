@@ -89,7 +89,7 @@
 </style>
 @section('content')
 <div class="content-wrapper">
-    <section class="content p-4">
+    <section class="content p-0">
         <div class="container-fluid ">
             <div class="row">
                 <div class="col-sm-6">
@@ -106,7 +106,7 @@
         
     </section>
 
-    <section class="content p-4 col-md-8" >
+    <section class="content p-3 col-md-8" >
         <div class="card card-default">
             <div class="card-header bg-red">
                 <h3 class="card-title"><b><h4>Status Data <?php
@@ -172,7 +172,7 @@
                                         <small id="title_eng_error"  class="title_eng_error input-group text-sm mt-2 text-danger error"></small>
                                     </div>
                                     <div class="form-group">
-                                        <label for="titleEn">Durasi Traning</label>
+                                            <label for="titleEn">Durasi Traning</label>
                                             <div class="input-group mb-1">
                                                 <input type="number" class="form-control" name="training_duration"  value="{{$databyid->training_duration}}" id="training_duration" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
                                                 <div class="input-group-append">
@@ -180,43 +180,6 @@
                                                 </div>
                                             </div>
                                     </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Right Card -->
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Pendaftaran Training</label>
-                                        <input type="text" name="registration_schedule" class="form-control" value="{{$registration_schedule}}" id="registration_schedule" placeholder="">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Mulai Training</label>
-                                        <input type="text" name="startdate" class="form-control" value="{{$startdate}}" id="startdate" placeholder="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Selesai Training</label>
-                                        <input type="type" name="enddate" class="form-control" value="{{$enddate}}" id="enddate" placeholder="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="salarytraining">Salary Training</label>
-                                        <input type="text" name="salarytraining" class="form-control" value="{{$databyid->salarytraining}}" id="salarytraining" placeholder="Rp 0">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                   
-                                    
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body"> 
-                                    
                                     <div class="form-group">
                                         <label for="titleEn">Type Training</label>
                                         <input type="text" name="typeonlineoffile" class="form-control" id="typeonlineoffile" value="{{$databyid->typeonlineoffile}}" placeholder="">
@@ -228,6 +191,41 @@
                                         <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
                                     </div>
                                     <div class="form-group">
+                                        <label for="titleEn">Link Pendaftaran</label>
+                                        <input type="text" name="link_pendaftaran" class="form-control"  value="{{$databyid->link_pendaftaran}}" id="link_pendaftaran" placeholder=" Masukan Link Google Form / Ms Form">
+                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salarytraining">Biaya Pendaftaran</label>
+                                        <input type="text" name="salarytraining" class="form-control" value="{{$databyid->salarytraining}}" id="salarytraining" placeholder="Rp 0">
+                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right Card -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    
+                                    <div class="form-group">
+                                        <label for="titleEn">Jadwal Pendaftaran</label>
+                                        <input type="text" name="registration_schedule" class="form-control" value="{{$registration_schedule}}" id="registration_schedule" placeholder="">
+                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Jadwal Penutupan</label>
+                                        <input type="text" name="closing_schedule" class="form-control" id="closing_schedule" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Jadwal Mulai</label>
+                                        <input type="text" name="startdate" class="form-control" value="{{$startdate}}" id="startdate" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Jadwal Selesai</label>
+                                        <input type="type" name="enddate" class="form-control" value="{{$enddate}}" id="enddate" placeholder="">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="picture">Photo</label>
                                         <div class="input-group">
                                             <div class="custom-file">
@@ -237,31 +235,29 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="titleEn">Link Pendaftaran</label>
-                                        <input type="text" name="link_pendaftaran" class="form-control"  value="{{$databyid->link_pendaftaran}}" id="link_pendaftaran" placeholder=" Masukan Link Google Form / Ms Form">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
+                                        <label for="titleEn">Persyaratan</label>
+                                        <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50">{{$databyid->requirements}}</textarea>
+                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
-                        <div class="card col-md-12">
-                            <div class="card-body"> 
-                                <div class="form-group">
-                                    <label for="titleEn">Persyaratan</label>
-                                    <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50">{{$databyid->requirements}}</textarea>
-                                    <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body"> 
+                                    <div class="form-group">
+                                        <label for="titleEn">Materi Training</label>
+                                        <textarea class="form-control desc" name="training_material" id="training_material" rows="4" cols="50">{{$databyid->training_material}}</textarea>
+                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Fasilitas Training</label>
+                                        <textarea class="form-control desc" name="facility" id="facility" rows="4" cols="50">{{$databyid->facility}}</textarea>
+                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="titleEn">Materi Training</label>
-                                    <textarea class="form-control desc" name="training_material" id="training_material" rows="4" cols="50">{{$databyid->training_material}}</textarea>
-                                    <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="titleEn">Fasilitas Training</label>
-                                    <textarea class="form-control desc" name="facility" id="facility" rows="4" cols="50">{{$databyid->facility}}</textarea>
-                                    <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                </div>
-                                
                             </div>
                         </div>
                     </div>

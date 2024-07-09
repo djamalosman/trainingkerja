@@ -90,7 +90,7 @@
 </style>
 @section('content')
 <div class="content-wrapper">
-    <section class="content p-4">
+    <section class="content p-0">
         <div class="container-fluid ">
             <div class="row">
                 <div class="col-sm-6">
@@ -107,7 +107,7 @@
         
     </section>
 
-    <section class="content p-4 col-md-8" >
+    <section class="content p-3 col-md-8" >
         <div class="card card-default">
             <div class="card-header bg-red">
                 <h3 class="card-title">Create Training / Cources</h3>
@@ -131,7 +131,7 @@
             
                     <div class="row">
                         <!-- Left Card -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
                                     
@@ -178,31 +178,41 @@
                                         <input type="text" name="location" class="form-control" id="location" placeholder="">
                                         <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Link Pendaftaran</label>
+                                        <input type="text" name="link_pendaftaran" class="form-control" id="link_pendaftaran" placeholder=" Masukan Link Google Form / Ms Form">
+                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salarytraining">Biaya Pendaftaran</label>
+                                        <input type="text" name="salarytraining" class="form-control" id="salarytraining" placeholder="Rp 0">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Right Card -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
                                     
                                     <div class="form-group">
-                                        <label for="titleEn">Jadwal Pendaftaran Training</label>
+                                        <label for="titleEn">Jadwal Pendaftaran</label>
                                         <input type="text" name="registration_schedule" class="form-control" id="registration_schedule" placeholder="">
                                         <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
                                     </div>
                                     <div class="form-group">
-                                        <label for="titleEn">Jadwal Mulai Training</label>
+                                        <label for="titleEn">Jadwal Penutupan</label>
+                                        <input type="text" name="closing_schedule" class="form-control" id="closing_schedule" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Jadwal Mulai</label>
                                         <input type="text" name="startdate" class="form-control" id="startdate" placeholder="">
                                     </div>
                                     <div class="form-group">
-                                        <label for="titleEn">Jadwal Selesai Training</label>
+                                        <label for="titleEn">Jadwal Selesai</label>
                                         <input type="type" name="enddate" class="form-control" id="enddate" placeholder="">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="salarytraining">Salary Training</label>
-                                        <input type="text" name="salarytraining" class="form-control" id="salarytraining" placeholder="Rp 0">
-                                    </div>
+                                    
                                     
                                     <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
                                     <div class="form-group">
@@ -216,32 +226,31 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="titleEn">Link Pendaftaran</label>
-                                        <input type="text" name="link_pendaftaran" class="form-control" id="link_pendaftaran" placeholder=" Masukan Link Google Form / Ms Form">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
+                                        <label for="titleEn">Persyaratan</label>
+                                        <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50"></textarea>
+                                        
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card col-md-12">
-                            <div class="card-body"> 
-                                <div class="form-group">
-                                    <label for="titleEn">Persyaratan</label>
-                                    <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50"></textarea>
-                                    <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body"> 
+                                    <div class="form-group">
+                                        <label for="titleEn">Materi Training</label>
+                                        <textarea class="form-control desc" name="training_material" id="training_material" rows="4" cols="50"></textarea>
+                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titleEn">Fasilitas Training</label>
+                                        <textarea class="form-control desc" name="facility" id="facility" rows="4" cols="50"></textarea>
+                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
+                                    </div>
+                                    
                                 </div>
-                                <div class="form-group">
-                                    <label for="titleEn">Materi Training</label>
-                                    <textarea class="form-control desc" name="training_material" id="training_material" rows="4" cols="50"></textarea>
-                                    <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="titleEn">Fasilitas Training</label>
-                                    <textarea class="form-control desc" name="facility" id="facility" rows="4" cols="50"></textarea>
-                                    <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -278,8 +287,8 @@
                 </div>
             </div>
         </div>
-        <!-- Success Modal -->
-        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+         <!-- Success Modal -->
+         <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-body">
@@ -287,10 +296,9 @@
                   <h4 class="mt-4">Oh Yeah!</h4>
                   <p>Data berhasil disimpan</p>
                 </div>
-               
               </div>
             </div>
-          </div>
+        </div>
            <!-- Failed Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -309,17 +317,6 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body">
-                  <i class="fas fa-check-circle check-icon"></i>
-                  <h4 class="mt-4">Oh Yeah!</h4>
-                  <p>Data berhasil disimpan </p>
-                </div>
-                
-              </div>
-            </div>
-          </div>
     </section>
 </div>
 
@@ -405,6 +402,7 @@ $(document).ready(function() {
             training_duration: $('#training_duration').val(),
             requirements: $('#requirements').val(),
             registration_schedule: formatDate($('#registration_schedule').val()),
+            closing_schedule: formatDate($('#closing_schedule').val()),
             startdate: formatDate($('#startdate').val()),
             enddate: formatDate($('#enddate').val()),
             salarytraining: $('#salarytraining').val(),
@@ -447,6 +445,10 @@ $(document).ready(function() {
                 <div class="form-group row">
                 <label>Jadwal Pendaftaran Training</label>
                 <input type="text" class="form-control" value="${formData.registration_schedule}" readonly>
+                </div>
+                <div class="form-group row">
+                <label>Jadwal Penutupan</label>
+                <input type="text" class="form-control" value="${formData.closing_schedule}" readonly>
                 </div>
                 <div class="form-group row">
                 <label>Jadwal Mulai Training</label>
@@ -603,7 +605,7 @@ $(document).ready(function() {
         startDate: new Date(),
     });
     $(".desc").summernote({
-        height: 75,
+        height: 73,
     });
     $('input[type="file"]').change(function(e) {
         console.log('Picture Changed');

@@ -368,10 +368,9 @@
                   <h4 class="mt-4">Oh Yeah!</h4>
                   <p>Data berhasil disimpan</p>
                 </div>
-               
               </div>
             </div>
-          </div>
+        </div>
            <!-- Failed Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
