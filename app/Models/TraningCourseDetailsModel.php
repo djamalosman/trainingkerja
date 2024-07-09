@@ -13,7 +13,7 @@ class TraningCourseDetailsModel extends Model
 
      
      protected $fillable = ['id_m_traning_course', 'id_m_sertifikasi','traning_name','training_duration',
-     'requirements','registration_schedule','startdate','enddate','salarytraining','training_material',
+     'requirements','registration_schedule','startdate','enddate','registrationfee','training_material','closing_schedule',
      'facility','typeonlineoffile','location','file','status',
      'link_pendaftaran','insert_by', 'updated_by','updated_by_ip'];
 

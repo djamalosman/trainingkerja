@@ -149,7 +149,7 @@ class TrainingCourseController extends Controller
             $listItem->registration_schedule        = $registration_schedule;
             $listItem->startdate                    = $startdate;
             $listItem->enddate                      = $enddate;
-            $listItem->salarytraining               = $req->salarytraining;
+            $listItem->registrationfee               = $req->salarytraining;
             $listItem->training_material            = (new HelperController)->scriptStripper( $req->training_material ?? '-');
             $listItem->facility                     = (new HelperController)->scriptStripper( $req->facility ?? '-');
             $listItem->typeonlineoffile             = $req->typeonlineoffile;
@@ -247,7 +247,7 @@ class TrainingCourseController extends Controller
             $listItem->registration_schedule        = $registration_schedule;
             $listItem->startdate                    = $startdate;
             $listItem->enddate                      = $enddate;
-            $listItem->salarytraining               = $req->salarytraining;
+            $listItem->registrationfee               = $req->salarytraining;
             $listItem->training_material            = (new HelperController)->scriptStripper( $req->training_material ?? '-');
             $listItem->facility                     = (new HelperController)->scriptStripper( $req->facility ?? '-');
             $listItem->typeonlineoffile             = $req->typeonlineoffile;
