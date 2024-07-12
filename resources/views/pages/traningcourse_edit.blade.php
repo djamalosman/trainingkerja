@@ -4,15 +4,44 @@
 <link rel="stylesheet" href="{{ asset('/') }}plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="{{ asset('/') }}plugins/summernote/summernote-bs4.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet" />
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 <style>
-
-
-.modal-body {
-    max-height: 400px;
-    max-width: 500px;
-    overflow-y: auto;
+  
+  .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            text-align: right;
+        }
+        .btn-custom {
+            margin-top: 25px;
+        }
+        .btn-add {
+            margin-top: 0;
+        }
+        
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Make sure it's above other elements */
 }
+.spinner-border.medium {
+    width: 5rem; /* Atur lebar spinner */
+    height: 5rem; /* Atur tinggi spinner */
+    border-width: .55em; /* Atur ketebalan border spinner */
+}
+.new-input-group {
+    margin-top: 10px; /* Adjust the margin as needed */
+}
+
 @keyframes checkAnimation {
       0% { transform: scale(0); }
       50% { transform: scale(1.2); }
@@ -40,60 +69,15 @@
       background-color: green;
       color: white;
     }
-    .form-group {
-    margin-bottom: 1rem; /* Menambahkan jarak bawah antar grup form */
-  }
-  .form-group label {
-    display: block; /* Menampilkan label sebagai block untuk memastikan label berada di atas input */
-    margin-bottom: .5rem; /* Menambahkan jarak antara label dan input */
-  }
-  .form-control {
-    width: 100%; /* Pastikan input mengambil lebar penuh dari form group */
-  }
-
-  .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1050; /* Make sure it's above other elements */
-}
-.spinner-border.medium {
-    width: 5rem; /* Atur lebar spinner */
-    height: 5rem; /* Atur tinggi spinner */
-    border-width: .55em; /* Atur ketebalan border spinner */
-}
-
-.spinner-border.custom-color {
-    border-color: rgba(0, 0, 0, 0.1); /* Warna border spinner yang lebih terang */
-    border-top-color: #e8f0fa; /* Warna spinner (warna utama) */
-}
-/* Efek zoom pada gambar thumbnail */
-.img-thumbnail {
-    transition: transform 0.3s ease; /* Animasi zoom */
-    cursor: pointer; /* Kursor pointer untuk menunjukkan gambar dapat diklik */
-}
-
-.img-thumbnail:hover {
-    transform: scale(1.6); /* Memperbesar gambar saat di-hover, gunakan nilai yang lebih tinggi untuk zoom lebih besar */
-}
-.modal-body img {
-    max-width: 100%; /* Memastikan gambar tidak melebihi lebar modal */
-    height: 100px!important; /* Menjaga rasio aspek gambar */
-}
 </style>
 @section('content')
+
 <div class="content-wrapper">
     <section class="content p-0">
         <div class="container-fluid ">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2> Edit Training / Cources</h2> 
+                    <h2> Create Training / Cources</h2>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -106,18 +90,10 @@
         
     </section>
 
-    <section class="content p-3 col-md-8" >
+    <section class="content p-3 col-md-7" >
         <div class="card card-default">
             <div class="card-header bg-red">
-                <h3 class="card-title"><b><h4>Status Data <?php
-                    if ($databyid->status ==1) {
-                      echo "Publish</b></h4>";
-                    } else {
-                       echo" Pending</b></h4>";
-                    }
-                    
-                    
-                    ?></h3>
+                <h3 class="card-title">Create Training / Cources</h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -131,185 +107,325 @@
             <!-- /.card-header -->
             
             <div class="card-body">
-                <form  enctype="multipart/form-data" id="training-form">
-                    
+              
                     <input type="hidden" name="id_content" value="{{ base64_encode($content) }}">
-                    <input type="hidden" name="iddtl" id="iddtl" value="{{$iddtl }}">
-            
+                    
                     <div class="row">
-                        <!-- Left Card -->
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    
-                                    <div class="form-group">
-                                        <label for="titleEn">Nama Traning</label>
-                                        <input type="text" name="traning_name" value="{{$databyid->traning_name}}" class="form-control" id="title" placeholder="">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Category</label>
-                                        <select class="form-control" name="category" id="category">
-                                            <option value="">Pilih</option>
-                                            @foreach($liscategory as $value)
-                                                <option value="{{ $value->id }}" {{ $databyid->id_m_traning_course == $value->id ? 'selected' : '' }}>
-                                                    {{ $value->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Jenis Sertifikasi</label>
-                                        <select class="form-control" name="cetificate_type" id="cetificate_type" onclick="saveSelectedValue()">
-                                            <option value="">Pilih</option>
-                                            @foreach($listsertifikasi as $value)
-                                            <option value="{{ $value->id }}" {{ $databyid->id_m_sertifikasi == $value->id ? 'selected' : '' }}>
-                                                {{ $value->nama }}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                        <small id="title_eng_error"  class="title_eng_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                            <label for="titleEn">Durasi Traning</label>
-                                            <div class="input-group mb-1">
-                                                <input type="number" class="form-control" name="training_duration"  value="{{$databyid->training_duration}}" id="training_duration" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="col-md-12">
+                            <form id="trainingForm" enctype="multipart/form-data">
+                                <input type="hidden" name="iddtl" value="{{ $iddtl }}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <!-- Nama Training -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Nama Training">
+                                            <div class="col-md-9">  
+                                                <input type="text" class="form-control" id="Nama Training" value="{{ $databyid->traning_name }}" name="nama_training">
+                                            </div>
+                                        </div>
+                                        <!-- Category -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Category">
+                                            <div class="col-md-5">
+                                                <select class="form-control" id="Category" name="category">
+                                                    <option value="">Pilih</option>
+                                                    @foreach($liscategory as $value)
+                                                            <option value="{{ $value->id }}" {{ $databyid->id_m_category_training_course == $value->id ? 'selected' : '' }}>
+                                                            {{ $value->nama }}
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Jenis Sertifikasi -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Jenis Sertifikasi">
+                                            <div class="col-md-5">
+                                                <select class="form-control" id="Jenis Sertifikasi" name="jenis_sertifikasi">
+                                                    <option value="">Pilih</option>
+                                                    @foreach($listsertifikasi as $value)
+                                                        <option value="{{ $value->id }}" {{ $databyid->id_m_jenis_sertifikasi_training_course == $value->id ? 'selected' : '' }}>
+                                                        {{ $value->nama }}
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Durasi Training -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Durasi Training">
+                                            <div class="col-md-5">
+                                                
                                                 <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2">Hari</span>
+                                                    <input type="number" class="form-control" value="{{ $databyid->training_duration }}" id="Durasi Training" name="training_duration"   placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2"><span class="input-group-text" id="basic-addon2">Hari</span>
                                                 </div>
                                             </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Type Training</label>
-                                        <input type="text" name="typeonlineoffile" class="form-control" id="typeonlineoffile" value="{{$databyid->typeonlineoffile}}" placeholder="">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Lokasi Training</label>
-                                        <input type="text" name="location" class="form-control" id="location" value="{{$databyid->location}}" placeholder="">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Link Pendaftaran</label>
-                                        <input type="text" name="link_pendaftaran" class="form-control"  value="{{$databyid->link_pendaftaran}}" id="link_pendaftaran" placeholder=" Masukan Link Google Form / Ms Form">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="salarytraining">Biaya Pendaftaran</label>
-                                        <input type="text" name="salarytraining" class="form-control" value="{{$databyid->salarytraining}}" id="salarytraining" placeholder="Rp 0">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Right Card -->
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Pendaftaran</label>
-                                        <input type="text" name="registration_schedule" class="form-control" value="{{$registration_schedule}}" id="registration_schedule" placeholder="">
-                                        <small id="title_id_error" class="title_id_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Penutupan</label>
-                                        <input type="text" name="closing_schedule" class="form-control" id="closing_schedule" placeholder="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Mulai</label>
-                                        <input type="text" name="startdate" class="form-control" value="{{$startdate}}" id="startdate" placeholder="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Jadwal Selesai</label>
-                                        <input type="type" name="enddate" class="form-control" value="{{$enddate}}" id="enddate" placeholder="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="picture">Photo</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" name="item_file"  accept="image/*" multiple class="custom-file-input" id="item_files">
-                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                        </div>
+                                        <!-- Persyaratan -->
+                                        <div class="form-group row">
+                                            <input type="text" class="col-md-3 form-control" readonly value="Persyaratan">
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="Persyaratan" placeholder="Ketik Manual" name="persyaratan[]">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        @if (Count($listpersyaratan) > 0)
+                                            @foreach ($listpersyaratan as $index => $datapersyaratan)
+                                                <div class="form-group row">
+                                                    <input type="text" class="col-md-3 form-control" readonly value="Persyaratan {{ $index + 1 }}">
+                                                    <div class="col-md-9">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Persyaratan {{ $index + 1 }}" value="{{ $datapersyaratan->nama }}" placeholder="Ketik Manual" name="persyaratanDb[]" data-idpersyaratan="{{ $datapersyaratan->id }}">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-danger btn-remove" onclick="removeDataPersyaratan(this)">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            
+                                        @endif
+                                        
+                                        <!-- Jadwal Training -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control"  readonly value="Jadwal Training">
+                                            <div class="col-md-2">
+                                                
+                                                <input type="" readonly class="form-control" style="background-color: yellow" placeholder="Mulai">
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <select class="form-control" id="Jadwal Training Muali: Tanggal" name="jadwal_mulai_tanggal">
+                                                            <option>Tanggal</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control" id="Jadwal Training Muali: Bulan" name="jadwal_mulai_bulan">
+                                                            <option>Bulan</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control"  id="Jadwal Training Muali: Tahun" name="jadwal_mulai_tahun">
+                                                            <option>Tahun</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-2 offset-md-3">
+                                                <input type="text" class="form-control" style="background-color: yellow" placeholder="Selesai" >
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <select class="form-control" id="Jadwal Training Selesai: Tanggal" name="jadwal_selesai_tanggal">
+                                                            <option>Tanggal</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control" id="Jadwal Training Selesai: Bulan" name="jadwal_selesai_bulan">
+                                                            <option>Bulan</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control" id="Jadwal Training Selesai: Tahun" name="jadwal_selesai_tahun">
+                                                            <option>Tahun</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Materi Training -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Materi Training">
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="Materi Training" placeholder="XXXX" name="materi_training[]">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if (Count($listmateri) > 0)
+                                            @foreach ($listmateri as $index => $datamateri)
+                                                <div class="form-group row">
+                                                    <input type="text" class="col-md-3 form-control" readonly value="Materi Training {{ $index + 1 }}">
+                                                    <div class="col-md-9">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Materi Training {{ $index + 1 }}" value="{{ $datamateri->nama }}" placeholder="Ketik Manual" name="materi_trainingDb[]" data-idmateritraining="{{ $datamateri->id }}">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-danger btn-remove" onclick="removeDataMateriTraining(this)">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            
+                                        @endif
+
+                                        <!-- Fasilitas -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Fasilitas">
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="Fasilitas" placeholder="XXXX" name="fasilitas[]">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if (Count($listmateri) > 0)
+                                            @foreach ($listfasilitas as $index => $datfasilitas)
+                                                <div class="form-group row">
+                                                    <input type="text" class="col-md-3 form-control" readonly value="Fasilitas {{ $index + 1 }}">
+                                                    <div class="col-md-9">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Fasilitas {{ $index + 1 }}" value="{{ $datfasilitas->nama }}" placeholder="Ketik Manual" name="fasilitasDb[]" data-idfasilitas="{{ $datfasilitas->id }}">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-danger btn-remove" onclick="removeDataFasilitas(this)">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            
+                                        @endif
+                                        <!-- Type -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Type">
+                                            <div class="col-md-5">
+                                                <input type="text" class="form-control" id="Type"  value="{{ $databyid->typeonlineoffile }}"  placeholder="Online / Offline" name="type">
+                                            </div>
+                                        </div>
+                                        <!-- Lokasi -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Lokasi">
+                                            <div class="col-md-5">
+                                                <select class="form-control" id="Lokasi" name="lokasi">
+                                                    <option>Pilih Provinsi</option>
+                                                    @foreach($listprovinsi as $value)
+                                                        <option value="{{ $value->id }}" {{ $databyid->id_provinsi == $value->id ? 'selected' : '' }}>
+                                                    {{ $value->nama }}
+                                                     @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Photo -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Photo">
+                                            <div class="col-md-5">
+                                                <div class="input-group">
+                                                    <input type="file" class="form-control" id="Photo" name="photo[]">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if (Count($listmateri) > 0)
+                                            @foreach ($listfiles as $index => $datphoto)
+                                                <div class="form-group row">
+                                                    <input type="text" class="col-md-3 form-control" readonly value="Photo {{ $index + 1 }}">
+                                                    <div class="col-md-9">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" readonly id="Photo {{ $index + 1 }}" value="{{ $datphoto->nama }}" name="photoData[]" data-iddphoto="{{ $datphoto->id }}">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-danger btn-remove" onclick="removeDataPhoto(this)">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            
+                                        @endif
+                                        <!-- Link Pendaftaran -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-3 form-control" readonly value="Link Pendaftaran">
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" value="{{ $databyid->link_pendaftaran }}" id="Link Pendaftaran" placeholder="Link Google Form / Ms Form" name="link_pendaftaran">
+                                            </div>
+                                        </div>
+                                        <!-- Buttons -->
+                                        <div class="form-group row">
+                                            <div class="col-md-6 offset-md-3">
+                                                <button type="button" class="btn btn-warning" onclick="previewForm()">Preview</button>
+                                                <button type="button" class="btn btn-success" id="publishButton">Publish</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Persyaratan</label>
-                                        <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50">{{$databyid->requirements}}</textarea>
-                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    
                                 </div>
-                            </div>
+                            </form>
+                            
                         </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body"> 
-                                    <div class="form-group">
-                                        <label for="titleEn">Materi Training</label>
-                                        <textarea class="form-control desc" name="training_material" id="training_material" rows="4" cols="50">{{$databyid->training_material}}</textarea>
-                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Fasilitas Training</label>
-                                        <textarea class="form-control desc" name="facility" id="facility" rows="4" cols="50">{{$databyid->facility}}</textarea>
-                                        <small id="description_error" class="description_error input-group text-sm mt-2 text-danger error"></small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="d-flex justify-content-center">
-                        <button type="button" id="preview-btn" class="btn btn-primary start">Preview</button> &nbsp;&nbsp;
-                        <button type="button" id="pending-btn" class="btn btn-primary start">Pending</button> &nbsp;&nbsp;
-                        <button type="button" id="publish-btn" class="btn btn-primary start">Publish</button>
-                    </div>
-                </form>
+                
             </div>
-        </div>
-       <!-- Modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="previewModalLabel">Preview</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Content will be inserted here -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="modal-content">
-                                    
-                                    <!-- Dynamically filled by JavaScript -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal fade" id="previewModal">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
                     
-                </div>
-            </div>
-        </div>
-        <!-- Success Modal -->
-        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-body">
-                  <i class="fas fa-check-circle check-icon"></i>
-                  <h4 class="mt-4">Oh Yeah!</h4>
-                  <p>Data berhasil disimpan dengan status.</p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                  <button type="button" class="btn btn-ok" data-dismiss="modal">Ok</button>
-                </div>
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                        <h4 class="modal-title">Modal Heading</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        
+                        <!-- Modal body -->
+                        <div class="modal-body" id="previewContent">
+                        </div>
+                        
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        
+                    </div>
+                    </div>
               </div>
-            </div>
-          </div>
+               <!-- Success Modal -->
+                <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                        <i class="fas fa-check-circle check-icon"></i>
+                        <h4 class="mt-4">Oh Yeah!</h4>
+                        <p>Data berhasil di Update</p>
+                        </div>
+                    </div>
+                    </div> 
+                </div>
+                <!-- Failed Modal -->
+                <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <i class="fas fa-exclamation-circle error-icon"></i>
+                            <br>
+                            <p id="error-message"></p>
+                        </div>
+                    
+                    </div>
+                    </div>
+                </div>
+                <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                    <div class="spinner-border medium custom-color" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+        </div>
+       
     </section>
 </div>
 
@@ -321,369 +437,380 @@
 <script src="{{ asset('/') }}plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="{{ asset('/') }}plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="{{ asset('/') }}plugins/summernote/summernote-bs4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-
-document.addEventListener('DOMContentLoaded', function() {
-  const salaryInput = document.getElementById('salarytraining');
-
-  // Function to format number as Rupiah
-  function formatRupiah(value) {
-    let number_string = value.replace(/[^,\d]/g, '').toString(),
-        split = number_string.split(','),
-        remainder = split[0].length % 3,
-        rupiah = split[0].substr(0, remainder),
-        thousands = split[0].substr(remainder).match(/\d{3}/g);
-    
-    // Add thousands separator
-    if (thousands) {
-      separator = remainder ? '.' : '';
-      rupiah += separator + thousands.join('.');
+    function addInput(button) {
+        var inputGroup = $(button).closest('.input-group');
+        var newInputGroup = inputGroup.clone();
+        newInputGroup.find('input').val('');
+        newInputGroup.find('.btn-add').remove();
+        newInputGroup.append('<button type="button" class="btn btn-danger btn-remove" onclick="removeInput(this)">-</button>');
+        newInputGroup.addClass('new-input-group'); // Add class for spacing
+        inputGroup.after(newInputGroup);
     }
 
-    // Add the currency symbol
-    rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-    return 'Rp ' + rupiah;
-  }
+    function removeInput(button) {
+        $(button).closest('.input-group').remove();
+    }
 
-  salaryInput.addEventListener('input', function(e) {
-    this.value = formatRupiah(this.value);
-  });
-});
+    function removeDataPersyaratan(button) {
+        var $formGroup = $(button).closest('.form-group');
+        var inputId = $formGroup.find('input[data-idpersyaratan]').data('idpersyaratan'); // Dapatkan ID dari atribut data-idpersyaratan
+        console.log(inputId)
+        
+        if (inputId) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
 
-$(document).ready(function() {
-    $('#preview-btn').click(function() {
-        // Fungsi untuk mengubah format tanggal MM/DD/YYYY ke YYYY-MM-DD
-        function formatDate(inputDate) {
-          if (!inputDate) return null; // Jika input kosong, kembalikan null
-          const [month, day, year] = inputDate.split('/');
-          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            $.ajax({
+                url: '/remove-persyaratan-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                type: 'GET',
+                success: function(response) {
+                    $formGroup.remove();
+                    // Opsional, tampilkan pesan sukses atau tangani responsnya
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
+                    $('#errorModal .modal-body').text(errorMessage); // Perbarui pesan error di modal
+                    $('#errorModal').modal('show');
+                }
+            });
+        } else {
+            // Jika tidak ada ID, cukup hapus grup form
+            $formGroup.remove();
         }
-        function stripHtmlTags(text) {
-            return text.replace(/<\/?[^>]+>/gi, ''); // Regex untuk menghapus tag HTML
-        }
-        // Ambil nilai dari input
-        var formData = {
-          traning_name: $('#title').val(),
-          category: $('#category').val(),
-          cetificate_type: $('#cetificate_type').val(),
-          training_duration: $('#training_duration').val(),
-          requirements: $('#requirements').val(),
-          registration_schedule: formatDate($('#registration_schedule').val()),
-          startdate: formatDate($('#startdate').val()),
-          enddate: formatDate($('#enddate').val()),
-          salarytraining: $('#salarytraining').val(),
-          training_material: $('#training_material').val(),
-          facility: $('#facility').val(),
-          typeonlineoffile: $('#typeonlineoffile').val(),
-          location: $('#location').val(),
-          link_pendaftaran: $('#link_pendaftaran').val(),
-          iddtl: $('#iddtl').val(),
-          status: 3
-        };
- 
-        // Tampilkan data di modal
-        $('#modal-content').html(`
-             <input type="hidden" class="form-control" value="${formData.iddtl}" readonly>
-            <div class="form-group row">
-                <label>Nama Traning</label>
-                <input type="text" class="form-control" value="${formData.traning_name}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Category</label>
-            <select class="form-control" readonly>
-                <option value="${formData.category}" selected>${$('#category option:selected').text()}</option>
-            </select>
-            </div>
-            <div class="form-group row">
-            <label>Jenis Sertifikasi</label>
-            <select class="form-control" readonly>
-                <option value="${formData.cetificate_type}" selected>${$('#cetificate_type option:selected').text()}</option>
-            </select>
-            </div>
-            <div class="form-group row">
-            <label>Durasi Traning</label>
-            <input type="text" class="form-control" value="${formData.training_duration}" readonly>
-            </div>
-            
-            <div class="form-group row">
-            <label>Jadwal Pendaftaran Training</label>
-            <input type="text" class="form-control" value="${formData.registration_schedule}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Jadwal Mulai Training</label>
-            <input type="text" class="form-control" value="${formData.startdate}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Jadwal Selesai Training</label>
-            <input type="text" class="form-control" value="${formData.enddate}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Salary Training</label>
-            <input type="text" class="form-control" value="${formData.salarytraining}" readonly>
-            </div>
-            
-            <div class="form-group row">
-            <label>Type Training</label>
-            <input type="text" class="form-control" value="${formData.typeonlineoffile}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Lokasi Training</label>
-            <input type="text" class="form-control" value="${formData.location}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Link Pendaftaran</label>
-            <input type="text" class="form-control" value="${formData.link_pendaftaran}" readonly>
-            </div>
-            <div class="form-group row">
-            <label>Persyaratan</label>
-            <textarea class="form-control" rows="4" readonly>${stripHtmlTags(formData.requirements)}</textarea>
-            </div>
-            <div class="form-group row">
-            <label>Materi Training</label>
-            <textarea class="form-control" rows="4" readonly>${stripHtmlTags(formData.training_material)}</textarea>
-            </div>
-            <div class="form-group row">
-            <label>Fasilitas Training</label>
-            <textarea class="form-control" rows="4" readonly>${stripHtmlTags(formData.facility)}</textarea>
-            </div>
-        `);
+    }
 
-        // Tampilkan modal
+    function removeDataMateriTraining(button) {
+        var $formGroup = $(button).closest('.form-group');
+        var inputId = $formGroup.find('input[data-idmateritraining]').data('idmateritraining'); // Dapatkan ID dari atribut data-idmateritraining
+
+        if (inputId) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+
+            $.ajax({
+                url: '/remove-materitraining-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                type: 'GET',
+                success: function(response) {
+                    $formGroup.remove();
+                    // Opsional, tampilkan pesan sukses atau tangani responsnya
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
+                    $('#errorModal .modal-body').text(errorMessage); // Perbarui pesan error di modal
+                    $('#errorModal').modal('show');
+                }
+            });
+        } else {
+            // Jika tidak ada ID, cukup hapus grup form
+            $formGroup.remove();
+        }
+    }
+
+    function removeDataFasilitas(button) {
+        var $formGroup = $(button).closest('.form-group');
+        var inputId = $formGroup.find('input[data-idfasilitas]').data('idfasilitas'); // Dapatkan ID dari atribut
+        console.log(inputId)
+        if (inputId) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+
+            $.ajax({
+                url: '/remove-fasilitas-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                type: 'GET',
+                success: function(response) {
+                    $formGroup.remove();
+                    // Opsional, tampilkan pesan sukses atau tangani responsnya
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
+                    $('#errorModal .modal-body').text(errorMessage); // Perbarui pesan error di modal
+                    $('#errorModal').modal('show');
+                }
+            });
+        } else {
+            // Jika tidak ada ID, cukup hapus grup form
+            $formGroup.remove();
+        }
+    }
+
+    function removeDataPhoto(button) {
+        var $formGroup = $(button).closest('.form-group');
+        var inputId = $formGroup.find('input[data-iddphoto]').data('iddphoto'); // Dapatkan ID dari atribut data-idfasilita
+
+        if (inputId) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+
+            $.ajax({
+                url: '/remove-photo-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                type: 'DELETE',
+                success: function(response) {
+                    $formGroup.remove();
+                    // Opsional, tampilkan pesan sukses atau tangani responsnya
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
+                    $('#errorModal .modal-body').text(errorMessage); // Perbarui pesan error di modal
+                    $('#errorModal').modal('show');
+                }
+            });
+        } else {
+            // Jika tidak ada ID, cukup hapus grup form
+            $formGroup.remove();
+        }
+    }
+
+    function previewForm() {
+        var previewContent = '<table class="table table-bordered">';
+        previewContent += '<tr><th>Field</th><th>Value</th></tr>';
+
+        // Iterate over each input field with an ID
+        $('#trainingForm input, #trainingForm select').each(function() {
+            var id = $(this).attr('id'); // Get the ID attribute
+            var value = $(this).val(); // Get the value of the input field
+
+            // Only display fields with an ID
+            if (id) {
+                previewContent += '<tr><td>' + id + '</td><td>' + value + '</td></tr>';
+            }
+        });
+
+        previewContent += '</table>';
+        $('#previewContent').html(previewContent);
         $('#previewModal').modal('show');
-
-        // Periksa apakah elemen file input ada dan bisa diakses
-        var fileInput = document.getElementById('item_files');
-        if (fileInput) {
-          var files = fileInput.files;
-          if (files.length > 0) {
-            var fileReaders = [];
-            var imageUrls = [];
-
-            // Function to handle when all files are loaded
-            function handleFilesLoaded() {
-              var imagesHtml = imageUrls.map((url, index) => `
-               <div class="form-group row">
-                                <label for="picture">Photo ${index + 1}</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div class="form-group row">
-                                
-                                <img src="${url}" alt="Preview Image ${index + 1}" class="img-thumbnail simulasi-gambar-picture-visi-misi" width="140px">
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                               
-                                            </div>
-                                        </div>
-                                
-                            </div>
-              `).join('');
-
-              $('#modal-content').append(imagesHtml);
-            }
-
-            // Read all files
-            for (var i = 0; i < files.length; i++) {
-              (function(file) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                  imageUrls.push(e.target.result);
-
-                  // Check if all files are processed
-                  if (imageUrls.length === files.length) {
-                    handleFilesLoaded();
-                  }
-                };
-
-                reader.readAsDataURL(file);
-              })(files[i]);
-            }
-          }
-        }
-      });
-
-
-
-    // Handle Pending button click
-    $('#pending-btn').click(function() {
-        submitFormWithStatus(2); // Status 2 for Pending
-    });
-
-    // Handle Publish button click
-    $('#publish-btn').click(function() {
-        submitFormWithStatus(1); // Status 1 for Publish
-    });
-
-    function submitFormWithStatus(status) {
-        var formData = $('#training-form').serialize();
-        formData += '&status=' + status; // Append status to form data
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        });
-        $.ajax({
-            url: '/update-course-endpoint', // Replace with your endpoint
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                // Tampilkan modal sukses
-                $('#successModal').modal('show');
-
-                // Tutup modal secara otomatis setelah 3 detik (3000 ms)
-                setTimeout(function() {
-                    $('#successModal').modal('hide');
-                    location.reload(); // Refresh halaman setelah menutup modal
-                }, 2000);
-                // Optionally, you can clear the form or close the modal
-                $('#previewModal').modal('hide');
-                $('#training-form')[0].reset(); // Reset form if needed
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
     }
 
-});
+    $(document).ready(function() {
+        
+            // Initialize Select2
+            $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_mulai_bulan"], select[name="jadwal_mulai_tahun"]').select2();
+            $('select[name="jadwal_selesai_tanggal"], select[name="jadwal_selesai_bulan"], select[name="jadwal_selesai_tahun"]').select2();
+            $('select[name="category"], select[name="jenis_sertifikasi"]').select2();
+            $('select[name="lokasi"]').select2();
+
+            // Populate days
+            for (let i = 1; i <= 31; i++) {
+                $('select[name="jadwal_mulai_tanggal"]').append(`<option value="${i}">${i}</option>`);
+            }
+
+            // Populate months
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            months.forEach((month, index) => {
+                $('select[name="jadwal_mulai_bulan"]').append(`<option value="${index + 1}">${month}</option>`);
+            });
+
+            // Populate years
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear; i <= currentYear + 10; i++) {
+                $('select[name="jadwal_mulai_tahun"]').append(`<option value="${i}">${i}</option>`);
+            }
 
 
+            for (let i = 1; i <= 31; i++) {
+                $('select[name="jadwal_selesai_tanggal"]').append(`<option value="${i}">${i}</option>`);
+            }
 
+            // Populate months
+            const monthsSelesai = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            monthsSelesai.forEach((month, index) => {
+                $('select[name="jadwal_selesai_bulan"]').append(`<option value="${index + 1}">${month}</option>`);
+            });
 
-    $("#registration_schedule").datepicker({
-        // format: "dd-mm-yyyy",
-        startDate: new Date(),
+            // Populate years
+            const currentYearSelesai = new Date().getFullYear();
+            for (let i = currentYearSelesai; i <= currentYearSelesai + 10; i++) {
+                $('select[name="jadwal_selesai_tahun"]').append(`<option value="${i}">${i}</option>`);
+            }
+
+            // Refresh Select2 options
+            $('select[name="jadwal_mulai_tanggal"]').trigger('change');
+            $('select[name="jadwal_mulai_bulan"]').trigger('change');
+            $('select[name="jadwal_mulai_tahun"]').trigger('change');
+
+            $('select[name="jadwal_selesai_tanggal"]').trigger('change');
+            $('select[name="jadwal_selesai_bulan"]').trigger('change');
+            $('select[name="jadwal_selesai_tahun"]').trigger('change');
+
+            $('select[name="category"]').trigger('change');
+            $('select[name="jenis_sertifikasi"]').trigger('change');
+            $('select[name="lokasi"]').trigger('change');
     });
-    $("#startdate").datepicker({
-        // format: "dd-mm-yyyy",
-        startDate: new Date(),
+        
+    $(document).ready(function() {
+            // Data tanggal
+            var tanggalStartDate = '{{ $startdate }}';
+            
+            // Pecah data tanggal menjadi tahun, bulan, dan hari
+            var tanggalParts = tanggalStartDate.split("-");
+            var tahun = tanggalParts[0];
+            var bulan = tanggalParts[1];
+            var hari = tanggalParts[2];
+
+            // Isi nilai input tanggal mulai
+            $('select[name="jadwal_mulai_tanggal"]').val(tanggalStartDate);
+
+            // Buat opsi untuk tanggal, bulan, dan tahun
+            for (var i = 1; i <= 31; i++) {
+                $('select[name="jadwal_mulai_tanggal"]').append($('<option>', {
+                    value: i,
+                    text: i,
+                    selected: (i == parseInt(hari)) // Set opsi terpilih jika nilai sesuai
+                }));
+            }
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+          
+            months.forEach((month, index) => {
+                $('select[name="jadwal_mulai_bulan"]').append($('<option>', {
+                    value: index + 1,
+                    text: month,
+                    selected: (index + 1 == parseInt(bulan)) // Set opsi terpilih jika nilai sesuai
+                }));
+            });
+
+            var currentYear = new Date().getFullYear();
+            for (var i = currentYear - 100; i <= currentYear + 20; i++) {
+                $('select[name="jadwal_mulai_tahun"]').append($('<option>', {
+                    value: i,
+                    text: i,
+                    selected: (i == parseInt(tahun)) // Set opsi terpilih jika nilai sesuai
+                }));
+            }
+
+            var tanggalEndDate = '{{ $enddate }}';
+            
+            // Pecah data tanggal menjadi tahun, bulan, dan hari
+            var tanggalPartsEndate = tanggalEndDate.split("-");
+            var tahunEndate = tanggalPartsEndate[0];
+            var bulanEndate = tanggalPartsEndate[1];
+            var hariEndate = tanggalPartsEndate[2];
+
+            // Isi nilai input tanggal selesai
+            $('select[name="jadwal_selesai_tanggal"]').val(tanggalEndDate);
+
+            // Buat opsi untuk tanggal, bulan, dan tahun
+            for (var i = 1; i <= 31; i++) {
+                $('select[name="jadwal_selesai_tanggal"]').append($('<option>', {
+                    value: i,
+                    text: i,
+                    selected: (i == parseInt(hariEndate)) // Set opsi terpilih jika nilai sesuai
+                }));
+            }
+            
+            months.forEach((month, index) => {
+                $('select[name="jadwal_selesai_bulan"]').append($('<option>', {
+                    value: index + 1,
+                    text: month,
+                    selected: (index + 1 == parseInt(bulan)) // Set opsi terpilih jika nilai sesuai
+                }));
+            });
+
+            var currentYearEndate = new Date().getFullYear();
+            for (var i = currentYearEndate - 100; i <= currentYearEndate + 20; i++) {
+                $('select[name="jadwal_selesai_tahun"]').append($('<option>', {
+                    value: i,
+                    text: i,
+                    selected: (i == parseInt(tahunEndate)) // Set opsi terpilih jika nilai sesuai
+                }));
+            }
+
+            // Set nilai dropdown ke nilai yang ada
+            // $('select[name="jadwal_mulai_tanggal"]').val(parseInt(hari));
+            // $('select[name="jadwal_mulai_bulan"]').val(parseInt(bulan));
+            // $('select[name="jadwal_mulai_tahun"]').val(parseInt(tahun));
     });
-    $("#enddate").datepicker({
-        // format: "dd-mm-yyyy",
-        startDate: new Date(),
-    });
-    $(".desc").summernote({
-        height: 75,
-    });
-    $('input[type="file"]').change(function(e) {
-        console.log('Picture Changed');
-        var files = [];
-        for (var i = 0; i < $(this)[0].files.length; i++) {
-            files.push($(this)[0].files[i].name);
-        }
-        const [file] = $(this)[0].files;
-        if (file) {
-            $(".simulasi-gambar-" + this.id).attr("src", URL.createObjectURL(file));
-        }
-        $(this).next(".custom-file-label").html(files.join(", "));
-    });
-    $(function() {
-        $('#side-list-traning-course').DataTable({
-            "paging": true,
-            "pageLength": 5,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+
+        $(document).ready(function() {
+            // Populate days
+            for (let i = 1; i <= 31; i++) {
+                $('#Jadwal Training Mulai\\: Tanggal').append(`<option value="${i}">${i}</option>`);
+            }
+
+            // Populate months
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            months.forEach((month, index) => {
+                $('#Jadwal Training Mulai\\: Bulan').append(`<option value="${index + 1}">${month}</option>`);
+            });
+
+            // Populate years
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear; i <= currentYear + 10; i++) {
+                $('#Jadwal Training Mulai\\: Tahun').append(`<option value="${i}">${i}</option>`);
+            }
         });
-    });
-    function deletePrompt(id) {
-        var url = "{{ route('pages-list-detail-delete',':id') }}";
-        url = url.replace(":id", id);
+        $(document).ready(function() {
+            function showLoading() {
+                $('#loadingOverlay').show();
+            }
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-        });
+            function hideLoading() {
+                $('#loadingOverlay').hide();
+            }
 
-        Swal.fire({
-            title: "Delete data?",
-            showCancelButton: true,
-            confirmButtonText: "Delete",
-            confirmButtonColor: "#d33",
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
+            $('#publishButton').click(function() {
+                showLoading(); // Show loading indicator
+
+                var form = $('#trainingForm')[0]; // Get the form element
+                var formData = new FormData(form); // Create FormData object
+
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 });
+
                 $.ajax({
-                    url: url,
-                    type: "GET",
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        data = JSON.parse(data);
-                        if (data["status"] == "success") {
-                            Toast.fire({
-                                icon: "success",
-                                title: data["message"],
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            Toast.fire({
-                                icon: "error",
-                                title: data["message"],
-                            });
-                        }
-                    },
-                    error: function(reject) {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Something went wrong",
-                        });
-                    },
-                });
-            }
-        });
-    }
+                    url: '/update-course-endpoint', // Replace with your API endpoint
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // Set to false for multipart/form-data
+                    processData: false, // Set to false to prevent jQuery from processing the data
+                    success: function(response) {
+                        hideLoading(); // Hide loading indicator
+                        $('#successModal').modal('show');
 
-    function parsingDataToModal(id) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
+                        setTimeout(function() {
+                            $('#successModal').modal('hide');
+                            location.reload();
+                        }, 2000);
+
+                        $('#previewModal').modal('hide');
+                        $('#trainingForm')[0].reset(); // Correct ID of the form
+                    },
+                    error: function(xhr, status, error) {
+                        hideLoading(); // Hide loading indicator
+                        var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
+                        $('#errorModal .modal-body').text(errorMessage); // Update error message in the modal
+                        $('#errorModal').modal('show');
+
+                        // Optionally, you can auto-close the error modal after some time
+                        // setTimeout(function() {
+                        //     $('#errorModal').modal('hide');
+                        //     location.reload();
+                        // }, 2000);
+                    }
+                });
+            });
         });
 
-        var url = "{{ route('edit-traningcourse-detail',':id') }}";
-        url = url.replace(":id", id);
-        $.ajax({
-            url: url,
-            type: "GET",
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                data = JSON.parse(data);
-                if (data["status"] == "success") {
-                    $("#edit-data-list-item").html(data["output"]);
-                    $("#edit-item").modal("toggle");
-                } else {
-                    Toast.fire({
-                        icon: "error",
-                        title: data["message"],
-                    });
-                }
-            },
-            error: function(reject) {
-                Toast.fire({
-                    icon: "error",
-                    title: "Something went wrong",
-                });
-            },
-        });
-    }
+
+
+
 </script>
 @endsection

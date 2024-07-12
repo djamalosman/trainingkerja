@@ -9,12 +9,12 @@ class TraningCourseDetailsModel extends Model
 {
     use HasFactory;
      //table name
-     protected $table = 'training_course_detail';
+     protected $table = 'dtc_training_course_detail';
 
      
-     protected $fillable = ['id_m_traning_course', 'id_m_sertifikasi','traning_name','training_duration',
-     'requirements','registration_schedule','startdate','enddate','registrationfee','training_material','closing_schedule',
-     'facility','typeonlineoffile','location','file','status',
-     'link_pendaftaran','insert_by', 'updated_by','updated_by_ip']; 
-
+     protected $fillable = ['id_m_category_training_course', 'id_m_jenis_sertifikasi_training_course','traning_name','training_duration',
+     'startdate','enddate','registrationfee',
+     'typeonlineoffile','file','status',
+     'link_pendaftaran','insert_by', 'updated_by','updated_by_ip','id_provinsi']; 
+     
 }

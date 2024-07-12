@@ -19,7 +19,7 @@ use App\Http\Controllers\Pages\PengandaanTenderUmumController;
 use App\Http\Controllers\Pages\ProdukDanLayananController;
 use App\Http\Controllers\Pages\TentangKamiController;
 use App\Http\Controllers\Pages\WhistleblowingController;
-use App\Http\Controllers\pages\TrainingCourseController;
+use App\Http\Controllers\Pages\TrainingCourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -409,7 +409,17 @@ use Illuminate\Support\Facades\Route;
 
             Route::post('/update-course-endpoint', [TrainingCourseController::class, 'updateCourseEndpoint'])->name('update-course-endpoint');
 
+            Route::get('/remove-persyaratan-endpoint/{id}', [TrainingCourseController::class, 'removePersyaratanEndpoint'])
+                ->name('remove-persyaratan-endpoint');
 
+            Route::get('/remove-materitraining-endpoint/{id}', [TrainingCourseController::class, 'removeMateriTrainingEndpoint'])
+                ->name('remove-materitraining-endpoint');
+
+            Route::get('/remove-fasilitas-endpoint/{id}', [TrainingCourseController::class, 'removeFasilitasEndpoint'])
+                ->name('remove-fasilitas-endpoint');
+
+            Route::get('/remove-photo-endpoint/{id}', [TrainingCourseController::class, 'removePhotoEndpoint'])
+                ->name('remove-photo-endpoint');
 
             Route::post('/store-course', [TrainingCourseController::class, 'storeCourse'])
                 ->name('store-course');

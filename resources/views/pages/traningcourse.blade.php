@@ -72,16 +72,12 @@
                                     <div class="row">
                                         <div class="col-0">
                                             
-                                              <a type="button" href="{{ route('get-view-store-traningcourse',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                                              </svg> Add</a>
+                                              <a type="button" href="{{ route('get-view-store-traningcourse',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                              </a>
                                         </div>
                                         <div class="col-1">
                                             
-                                                <button id="filterButton" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-                                                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
-                                                  </svg>  Filter</button>
-                                                
+                                            <a type="button" id="filterButton" class="btn btn-primary"><i class="fa fa-filter" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                     <br>
@@ -93,7 +89,6 @@
                                                     <th>Nama Training</th>
                                                     <th>Category</th> 
                                                     <th>Nama Sertifikat</th>
-                                                    <th>Tanggal Pendaftaran</th>
                                                     <th>Tanggal Mulai dan Selesai</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
@@ -311,7 +306,6 @@ $(document).ready(function() {
                         value.traning_name,
                         value.category,
                         value.cetificate_type,
-                        formatDate(value.registration_schedule),
                         formatDateRange(value.startdate, value.enddate),
                         statusBadge,
                         '<div class="container mt-12"> <div class="row button-container"><div class="col-6 text-left"><a type="button" href="/edit-traningcourse/' + btoa(value.id) + '" class="btn btn-warning"><i class="fa fa-bars"></i></a></div>' +
