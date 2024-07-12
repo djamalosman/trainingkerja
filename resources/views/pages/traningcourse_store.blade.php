@@ -465,10 +465,10 @@
                     $('#errorModal').modal('show');
 
                     // Optionally, you can auto-close the error modal after some time
-                    setTimeout(function() {
-                        $('#errorModal').modal('hide');
-                        location.reload();
-                    }, 2000);
+                    // setTimeout(function() {
+                    //     $('#errorModal').modal('hide');
+                    //     location.reload();
+                    // }, 2000);
                 }
             });
         });
