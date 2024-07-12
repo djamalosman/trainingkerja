@@ -290,7 +290,7 @@ $(document).ready(function() {
     // Function to load table data
     function loadTableData(filterValues) {
         $.ajax({
-            url: '/get-data-course',
+            url: '/public/get-data-course',
             type: 'GET',
             data: filterValues,
             success: function(data) {
