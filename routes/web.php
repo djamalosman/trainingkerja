@@ -399,8 +399,8 @@ use Illuminate\Support\Facades\Route;
             Route::get('/get-datacourse-filters', [TrainingCourseController::class, 'getFilters'])
                 ->name('get-datacourse-filters');
 
-            Route::get('/public/get-data-course', [TrainingCourseController::class, 'getDataCourses'])
-                ->name('/public/get-data-course');
+            Route::get('/get-data-course', [TrainingCourseController::class, 'getDataCourses'])
+                ->name('get-data-course');
 
             Route::get('/public/get-view-store-traningcourse/{id}', [TrainingCourseController::class, 'ViewsStoretraningcourse'])
                 ->name('public/get-view-store-traningcourse');
