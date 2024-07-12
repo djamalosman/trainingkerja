@@ -464,11 +464,11 @@
                     $('#errorModal .modal-body').text(errorMessage); // Update error message in the modal
                     $('#errorModal').modal('show');
 
-                    // Optionally, you can auto-close the error modal after some time
-                    // setTimeout(function() {
-                    //     $('#errorModal').modal('hide');
-                    //     location.reload();
-                    // }, 2000);
+                    //Optionally, you can auto-close the error modal after some time
+                    setTimeout(function() {
+                        $('#errorModal').modal('hide');
+                        location.reload();
+                    }, 2000);
                 }
             });
         });
