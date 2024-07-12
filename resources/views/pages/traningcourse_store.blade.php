@@ -493,7 +493,7 @@
                 });
 
                 $.ajax({
-                    url: '/store-course-endpoint', // Replace with your API endpoint
+                    url: '/public/store-course-endpoint', // Replace with your API endpoint
                     type: 'POST',
                     data: formData,
                     contentType: false, // Set to false for multipart/form-data
@@ -516,11 +516,11 @@
                         $('#errorModal .modal-body').text(errorMessage); // Update error message in the modal
                         $('#errorModal').modal('show');
 
-                        // Optionally, you can auto-close the error modal after some time
-                        // setTimeout(function() {
-                        //     $('#errorModal').modal('hide');
-                        //     location.reload();
-                        // }, 2000);
+                        Optionally, you can auto-close the error modal after some time
+                        setTimeout(function() {
+                            $('#errorModal').modal('hide');
+                            location.reload();
+                        }, 2000);
                     }
                 });
             });

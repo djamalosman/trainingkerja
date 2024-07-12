@@ -77,7 +77,7 @@
         <div class="container-fluid ">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2> Create Training / Cources</h2>
+                    <h2> Update Training / Cources</h2>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -93,7 +93,7 @@
     <section class="content p-3 col-md-7" >
         <div class="card card-default">
             <div class="card-header bg-red">
-                <h3 class="card-title">Create Training / Cources</h3>
+                <h3 class="card-title">Update Training / Cources</h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -468,7 +468,7 @@
             });
 
             $.ajax({
-                url: '/remove-persyaratan-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-persyaratan-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -498,7 +498,7 @@
             });
 
             $.ajax({
-                url: '/remove-materitraining-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-materitraining-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -528,7 +528,7 @@
             });
 
             $.ajax({
-                url: '/remove-fasilitas-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-fasilitas-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -558,7 +558,7 @@
             });
 
             $.ajax({
-                url: '/remove-photo-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-photo-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'DELETE',
                 success: function(response) {
                     $formGroup.remove();
@@ -776,7 +776,7 @@
                 });
 
                 $.ajax({
-                    url: '/update-course-endpoint', // Replace with your API endpoint
+                    url: '/public/update-course-endpoint', // Replace with your API endpoint
                     type: 'POST',
                     data: formData,
                     contentType: false, // Set to false for multipart/form-data

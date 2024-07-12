@@ -72,7 +72,7 @@
                                     <div class="row">
                                         <div class="col-0">
                                             
-                                              <a type="button" href="{{ route('get-view-store-traningcourse',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                              <a type="button" href="{{ route('public/get-view-store-traningcourse',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
                                               </a>
                                         </div>
                                         <div class="col-1">
@@ -242,7 +242,7 @@ $(document).ready(function() {
     // Function to populate dropdown list
     function loadDropdownData() {
         $.ajax({
-            url: '/get-datacourse-filters', // URL endpoint to fetch data
+            url: '/public/get-datacourse-filters', // URL endpoint to fetch data
             type: 'GET',
             success: function(data) {
                 var traningNameSelect = $('#traningNameSelect');
@@ -290,7 +290,7 @@ $(document).ready(function() {
     // Function to load table data
     function loadTableData(filterValues) {
         $.ajax({
-            url: '/get-data-course',
+            url: '/public/get-data-course',
             type: 'GET',
             data: filterValues,
             success: function(data) {
@@ -308,7 +308,7 @@ $(document).ready(function() {
                         value.cetificate_type,
                         formatDateRange(value.startdate, value.enddate),
                         statusBadge,
-                        '<div class="container mt-12"> <div class="row button-container"><div class="col-6 text-left"><a type="button" href="/edit-traningcourse/' + btoa(value.id) + '" class="btn btn-warning"><i class="fa fa-bars"></i></a></div>' +
+                        '<div class="container mt-12"> <div class="row button-container"><div class="col-6 text-left"><a type="button" href="/public/edit-traningcourse/' + btoa(value.id) + '" class="btn btn-warning"><i class="fa fa-bars"></i></a></div>' +
                         '<div class="col-6 text-left"><button type="button" onclick="deletePrompt(\'' + value.id + '\')" class="btn btn-danger"><i class="fa fa-trash"></i></button></div></div> </div>'
                     ]).draw(false);
                 });

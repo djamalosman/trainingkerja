@@ -526,6 +526,22 @@ class TrainingCourseController extends Controller
         return json_encode($response);
     }
 
+
+    public function removePTrainingCourse ($id)
+    {
+        TraningCourseDetailsModel::where('id', $id)->delete();
+        Dtc_Persyaratan_TrainingCourseModel::where('id_training_course_dtl', $id)->delete();
+        Dtc_Materi_TrainingCourseModel::where('id_training_course_dtl', $id)->delete();
+        Dtc_Fasilitas_TrainingCourseModel::where('id_training_course_dtl', $id)->delete();
+        dtc_File_TrainingCourseModel::where('id_training_course_dtl', $id)->delete();
+
+        $response = [
+            'status' => 'success',
+            'message' => 'Data berhasil disimpan'
+        ];
+        return json_encode($response);
+    }
+
     public function editTraningCourseDetail($id)
     {
         try {
