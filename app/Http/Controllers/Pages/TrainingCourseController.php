@@ -124,7 +124,7 @@ class TrainingCourseController extends Controller
                 $req->jadwal_selesai_tanggal
             )->toDateString();
 
-            
+            $idProvinsi = $request->id_provinsi === 'Pilih Provinsi' ? 0 : $request->id_provinsi;
 
             $listItem = new TraningCourseDetailsModel();
             $listItem->traning_name                 = $req->nama_training;
@@ -134,7 +134,7 @@ class TrainingCourseController extends Controller
             $listItem->startdate                    = $jadwalMulai;
             $listItem->enddate                      = $jadwalSelesai;
             $listItem->typeonlineoffile             = $req->type;
-            $listItem->id_provinsi                  = $req->lokasi;
+            $listItem->id_provinsi                  = $idProvinsi;
             $listItem->link_pendaftaran             = $req->link_pendaftaran;
             $listItem->status                       = 1;
             $listItem->insert_by                    = session()->get('id');
@@ -297,7 +297,8 @@ class TrainingCourseController extends Controller
                 $req->jadwal_selesai_tanggal
             )->toDateString();
 
-            
+            $idProvinsi = $request->id_provinsi === 'Pilih Provinsi' ? 0 : $request->id_provinsi;
+
 
             $listItem = TraningCourseDetailsModel::find($req->iddtl);
             $listItem->traning_name                 = $req->nama_training;
@@ -307,7 +308,7 @@ class TrainingCourseController extends Controller
             $listItem->startdate                    = $jadwalMulai;
             $listItem->enddate                      = $jadwalSelesai;
             $listItem->typeonlineoffile             = $req->type;
-            $listItem->id_provinsi                  = $req->lokasi ?? 0;
+            $listItem->id_provinsi                  = $idProvinsi;
             $listItem->link_pendaftaran             = $req->link_pendaftaran;
             $listItem->status                       = 1;
             $listItem->insert_by                    = session()->get('id');
