@@ -361,7 +361,6 @@
 <script src="{{ asset('/') }}plugins/summernote/summernote-bs4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 <script>
     function addInput(button) {
         var inputGroup = $(button).closest('.input-group');
@@ -397,137 +396,83 @@
         $('#previewModal').modal('show');
     }
 
-     $(document).ready(function() {
-        
-            // Initialize Select2
-            $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_mulai_bulan"], select[name="jadwal_mulai_tahun"]').select2();
-            $('select[name="jadwal_selesai_tanggal"], select[name="jadwal_selesai_bulan"], select[name="jadwal_selesai_tahun"]').select2();
-            $('select[name="category"], select[name="jenis_sertifikasi"]').select2();
-            $('select[name="lokasi"]').select2();
+    function showLoading() {
+        $('#loadingOverlay').show();
+    }
 
-            // Populate days
-            for (let i = 1; i <= 31; i++) {
-                $('select[name="jadwal_mulai_tanggal"]').append(`<option value="${i}">${i}</option>`);
-            }
+    function hideLoading() {
+        $('#loadingOverlay').hide();
+    }
 
-            // Populate months
-            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            months.forEach((month, index) => {
-                $('select[name="jadwal_mulai_bulan"]').append(`<option value="${index + 1}">${month}</option>`);
-            });
+    $(document).ready(function() {
+        // Initialize Select2
+        $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_mulai_bulan"], select[name="jadwal_mulai_tahun"]').select2();
+        $('select[name="jadwal_selesai_tanggal"], select[name="jadwal_selesai_bulan"], select[name="jadwal_selesai_tahun"]').select2();
+        $('select[name="category"], select[name="jenis_sertifikasi"]').select2();
+        $('select[name="lokasi"]').select2();
 
-            // Populate years
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear; i <= currentYear + 10; i++) {
-                $('select[name="jadwal_mulai_tahun"]').append(`<option value="${i}">${i}</option>`);
-            }
+        // Populate days
+        for (let i = 1; i <= 31; i++) {
+            $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_selesai_tanggal"]').append(`<option value="${i}">${i}</option>`);
+        }
 
-
-            for (let i = 1; i <= 31; i++) {
-                $('select[name="jadwal_selesai_tanggal"]').append(`<option value="${i}">${i}</option>`);
-            }
-
-            // Populate months
-            const monthsSelesai = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            monthsSelesai.forEach((month, index) => {
-                $('select[name="jadwal_selesai_bulan"]').append(`<option value="${index + 1}">${month}</option>`);
-            });
-
-            // Populate years
-            const currentYearSelesai = new Date().getFullYear();
-            for (let i = currentYearSelesai; i <= currentYearSelesai + 10; i++) {
-                $('select[name="jadwal_selesai_tahun"]').append(`<option value="${i}">${i}</option>`);
-            }
-
-            // Refresh Select2 options
-            $('select[name="jadwal_mulai_tanggal"]').trigger('change');
-            $('select[name="jadwal_mulai_bulan"]').trigger('change');
-            $('select[name="jadwal_mulai_tahun"]').trigger('change');
-
-            $('select[name="jadwal_selesai_tanggal"]').trigger('change');
-            $('select[name="jadwal_selesai_bulan"]').trigger('change');
-            $('select[name="jadwal_selesai_tahun"]').trigger('change');
-
-            $('select[name="category"]').trigger('change');
-            $('select[name="jenis_sertifikasi"]').trigger('change');
-            $('select[name="lokasi"]').trigger('change');
-        });
-   
-        $(document).ready(function() {
-            // Populate days
-            for (let i = 1; i <= 31; i++) {
-                $('#Jadwal Training Mulai\\: Tanggal').append(`<option value="${i}">${i}</option>`);
-            }
-
-            // Populate months
-            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            months.forEach((month, index) => {
-                $('#Jadwal Training Mulai\\: Bulan').append(`<option value="${index + 1}">${month}</option>`);
-            });
-
-            // Populate years
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear; i <= currentYear + 10; i++) {
-                $('#Jadwal Training Mulai\\: Tahun').append(`<option value="${i}">${i}</option>`);
-            }
-        });
-        $(document).ready(function() {
-            function showLoading() {
-                $('#loadingOverlay').show();
-            }
-
-            function hideLoading() {
-                $('#loadingOverlay').hide();
-            }
-
-            $('#publishButton').click(function() {
-                showLoading(); // Show loading indicator
-
-                var form = $('#trainingForm')[0]; // Get the form element
-                var formData = new FormData(form); // Create FormData object
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-
-                $.ajax({
-                    url: '/public/store-course-endpoint', // Replace with your API endpoint
-                    type: 'POST',
-                    data: formData,
-                    contentType: false, // Set to false for multipart/form-data
-                    processData: false, // Set to false to prevent jQuery from processing the data
-                    success: function(response) {
-                        hideLoading(); // Hide loading indicator
-                        $('#successModal').modal('show');
-
-                        setTimeout(function() {
-                            $('#successModal').modal('hide');
-                            location.reload();
-                        }, 2000);
-
-                        $('#previewModal').modal('hide');
-                        $('#trainingForm')[0].reset(); // Correct ID of the form
-                    },
-                    error: function(xhr, status, error) {
-                        hideLoading(); // Hide loading indicator
-                        var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
-                        $('#errorModal .modal-body').text(errorMessage); // Update error message in the modal
-                        $('#errorModal').modal('show');
-
-                        Optionally, you can auto-close the error modal after some time
-                        setTimeout(function() {
-                            $('#errorModal').modal('hide');
-                            location.reload();
-                        }, 2000);
-                    }
-                });
-            });
+        // Populate months
+        const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        months.forEach((month, index) => {
+            $('select[name="jadwal_mulai_bulan"], select[name="jadwal_selesai_bulan"]').append(`<option value="${index + 1}">${month}</option>`);
         });
 
+        // Populate years
+        const currentYear = new Date().getFullYear();
+        for (let i = currentYear; i <= currentYear + 10; i++) {
+            $('select[name="jadwal_mulai_tahun"], select[name="jadwal_selesai_tahun"]').append(`<option value="${i}">${i}</option>`);
+        }
 
+        $('#publishButton').click(function() {
+            showLoading(); // Show loading indicator
 
+            var form = $('#trainingForm')[0]; // Get the form element
+            var formData = new FormData(form); // Create FormData object
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+
+            $.ajax({
+                url: '/public/store-course-endpoint', // Replace with your API endpoint
+                type: 'POST',
+                data: formData,
+                contentType: false, // Set to false for multipart/form-data
+                processData: false, // Set to false to prevent jQuery from processing the data
+                success: function(response) {
+                    hideLoading(); // Hide loading indicator
+                    $('#successModal').modal('show');
+
+                    setTimeout(function() {
+                        $('#successModal').modal('hide');
+                        location.reload();
+                    }, 2000);
+
+                    $('#previewModal').modal('hide');
+                    $('#trainingForm')[0].reset(); // Correct ID of the form
+                },
+                error: function(xhr, status, error) {
+                    hideLoading(); // Hide loading indicator
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
+                    $('#errorModal .modal-body').text(errorMessage); // Update error message in the modal
+                    $('#errorModal').modal('show');
+
+                    // Optionally, you can auto-close the error modal after some time
+                    setTimeout(function() {
+                        $('#errorModal').modal('hide');
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        });
+    });
 </script>
+
 @endsection
