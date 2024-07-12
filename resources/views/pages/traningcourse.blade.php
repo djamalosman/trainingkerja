@@ -72,7 +72,7 @@
                                     <div class="row">
                                         <div class="col-0">
                                             
-                                              <a type="button" href="{{ route('public/get-view-store-traningcourse',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                              <a type="button" href="{{ route('get-view-store-traningcourse',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
                                               </a>
                                         </div>
                                         <div class="col-1">

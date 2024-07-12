@@ -402,33 +402,33 @@ use Illuminate\Support\Facades\Route;
             Route::get('/get-data-course', [TrainingCourseController::class, 'getDataCourses'])
                 ->name('get-data-course');
 
-            Route::get('/public/get-view-store-traningcourse/{id}', [TrainingCourseController::class, 'ViewsStoretraningcourse'])
-                ->name('public/get-view-store-traningcourse');
+            Route::get('/get-view-store-traningcourse/{id}', [TrainingCourseController::class, 'ViewsStoretraningcourse'])
+                ->name('get-view-store-traningcourse');
 
-            Route::post('/public/store-course-endpoint', [TrainingCourseController::class, 'storeCourseEndpoint'])->name('public/store-course-endpoint');
+            Route::post('/store-course-endpoint', [TrainingCourseController::class, 'storeCourseEndpoint'])->name('store-course-endpoint');
 
-            Route::post('/public/update-course-endpoint', [TrainingCourseController::class, 'updateCourseEndpoint'])->name('update-course-endpoint');
+            Route::post('/update-course-endpoint', [TrainingCourseController::class, 'updateCourseEndpoint'])->name('update-course-endpoint');
 
-            Route::get('/public/remove-persyaratan-endpoint/{id}', [TrainingCourseController::class, 'removePersyaratanEndpoint'])
+            Route::get('/remove-persyaratan-endpoint/{id}', [TrainingCourseController::class, 'removePersyaratanEndpoint'])
                 ->name('public/remove-persyaratan-endpoint');
 
-            Route::get('/public/remove-materitraining-endpoint/{id}', [TrainingCourseController::class, 'removeMateriTrainingEndpoint'])
-                ->name('public/remove-materitraining-endpoint');
+            Route::get('/remove-materitraining-endpoint/{id}', [TrainingCourseController::class, 'removeMateriTrainingEndpoint'])
+                ->name('remove-materitraining-endpoint');
 
-            Route::get('/public/remove-fasilitas-endpoint/{id}', [TrainingCourseController::class, 'removeFasilitasEndpoint'])
-                ->name('public/remove-fasilitas-endpoint');
+            Route::get('/remove-fasilitas-endpoint/{id}', [TrainingCourseController::class, 'removeFasilitasEndpoint'])
+                ->name('remove-fasilitas-endpoint');
 
-            Route::get('/public/remove-photo-endpoint/{id}', [TrainingCourseController::class, 'removePhotoEndpoint'])
-                ->name('public/remove-photo-endpoint');
+            Route::get('/remove-photo-endpoint/{id}', [TrainingCourseController::class, 'removePhotoEndpoint'])
+                ->name('remove-photo-endpoint');
 
-            Route::get('/public/remove-trainingcourse/{id}', [TrainingCourseController::class, 'removePTrainingCourse'])
-                ->name('public/remove-trainingcourse');
+            Route::get('/remove-trainingcourse/{id}', [TrainingCourseController::class, 'removePTrainingCourse'])
+                ->name('remove-trainingcourse');
 
             Route::post('/store-course', [TrainingCourseController::class, 'storeCourse'])
                 ->name('store-course');
 
-            Route::get('/public/edit-traningcourse/{id}', [TrainingCourseController::class, 'editTraningCourse'])
-                ->name('public/edit-traningcourse');
+            Route::get('/edit-traningcourse/{id}', [TrainingCourseController::class, 'editTraningCourse'])
+                ->name('edit-traningcourse');
 
 
             Route::post('/update-traning-course', [TrainingCourseController::class, 'updateTraningCourse'])
