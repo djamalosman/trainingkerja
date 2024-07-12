@@ -124,7 +124,7 @@ class TrainingCourseController extends Controller
                 $req->jadwal_selesai_tanggal
             )->toDateString();
 
-            $idProvinsi = $request->id_provinsi === 'Pilih Provinsi' ? 0 : $request->id_provinsi;
+            $idProvinsi = $req->id_provinsi === 'Pilih Provinsi' ? 0 : $req->id_provinsi;
 
             $listItem = new TraningCourseDetailsModel();
             $listItem->traning_name                 = $req->nama_training;
@@ -297,7 +297,7 @@ class TrainingCourseController extends Controller
                 $req->jadwal_selesai_tanggal
             )->toDateString();
 
-            $idProvinsi = $request->id_provinsi === 'Pilih Provinsi' ? 0 : $request->id_provinsi;
+            $idProvinsi = $req->id_provinsi === 'Pilih Provinsi' ? 0 : $req->id_provinsi;
 
 
             $listItem = TraningCourseDetailsModel::find($req->iddtl);
