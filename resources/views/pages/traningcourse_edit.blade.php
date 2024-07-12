@@ -559,7 +559,7 @@
 
             $.ajax({
                 url: '/public/remove-photo-endpoint/' + inputId, // Ganti dengan endpoint API Anda
-                type: 'DELETE',
+                type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
                     // Opsional, tampilkan pesan sukses atau tangani responsnya

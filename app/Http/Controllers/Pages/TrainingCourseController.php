@@ -134,7 +134,7 @@ class TrainingCourseController extends Controller
             $listItem->startdate                    = $jadwalMulai;
             $listItem->enddate                      = $jadwalSelesai;
             $listItem->typeonlineoffile             = $req->type;
-            $listItem->id_provinsi                  = $req->location;
+            $listItem->id_provinsi                  = $req->lokasi;
             $listItem->link_pendaftaran             = $req->link_pendaftaran;
             $listItem->status                       = 1;
             $listItem->insert_by                    = session()->get('id');
