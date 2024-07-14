@@ -41,7 +41,15 @@
 .new-input-group {
     margin-top: 10px; /* Adjust the margin as needed */
 }
+/* Efek zoom pada gambar thumbnail */
+.img-thumbnail {
+    transition: transform 0.3s ease; /* Animasi zoom */
+    cursor: pointer; /* Kursor pointer untuk menunjukkan gambar dapat diklik */
+}
 
+.img-thumbnail:hover {
+    transform: scale(1.6); /* Memperbesar gambar saat di-hover, gunakan nilai yang lebih tinggi untuk zoom lebih besar */
+}
 @keyframes checkAnimation {
       0% { transform: scale(0); }
       50% { transform: scale(1.2); }
@@ -73,7 +81,7 @@
 @section('content')
 
 <div class="content-wrapper">
-    <section class="content p-0">
+    <section class="content p-3">
         <div class="container-fluid ">
             <div class="row">
                 <div class="col-sm-6">
@@ -90,7 +98,7 @@
         
     </section>
 
-    <section class="content p-3 col-md-7" >
+    <section class="content p-4 col-md-12" >
         <div class="card card-default">
             <div class="card-header bg-red">
                 <h3 class="card-title">Create Training / Cources</h3>
@@ -111,21 +119,23 @@
                     <input type="hidden" name="id_content" value="{{ base64_encode($content) }}">
                     <div class="row">
                         <div class="col-md-12">
-                            <form id="trainingForm" enctype="multipart/form-data">
+                            <form id="training-form" enctype="multipart/form-data">
                                 <div class="card">
                                     <div class="card-body">
                                         <!-- Nama Training -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Nama Training">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Nama Training">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-9">  
-                                                <input type="text" class="form-control" id="Nama Training" name="nama_training">
+                                                <input type="text" class="form-control" id="nama_training" name="nama_training">
                                             </div>
                                         </div>
                                         <!-- Category -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Category">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Category">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-5">
-                                                <select class="form-control" id="Category" name="category">
+                                                <select class="form-control" id="category" name="category">
                                                     <option value="">Pilih</option>
                                                     @foreach($liscategory as $value)
                                                         <option value="{{$value->id}}">{{$value->nama}}</option>
@@ -135,9 +145,10 @@
                                         </div>
                                         <!-- Jenis Sertifikasi -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Jenis Sertifikasi">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Jenis Sertifikasi">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-5">
-                                                <select class="form-control" id="Jenis Sertifikasi" name="jenis_sertifikasi">
+                                                <select class="form-control" id="jenis_sertifikasi" name="jenis_sertifikasi">
                                                     <option value="">Pilih</option>
                                                     @foreach($listsertifikasi as $value)
                                                         <option value="{{$value->id}}">{{$value->nama}}</option>
@@ -147,47 +158,51 @@
                                         </div>
                                         <!-- Durasi Training -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Durasi Training">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Durasi Training">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-5">
                                                 
                                                 <div class="input-group-append">
-                                                    <input type="number" class="form-control" id="Durasi Training" name="training_duration"   placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2"><span class="input-group-text" id="basic-addon2">Hari</span>
+                                                    <input type="number" class="form-control" id="training_duration" name="training_duration"   placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2"><span class="input-group-text" id="basic-addon2">Hari</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Persyaratan -->
                                         <div class="form-group row">
-                                            <input type="text" class="col-md-3 form-control" readonly value="Persyaratan">
+                                            <input type="text" class="col-md-2 form-control" readonly value="Persyaratan">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-9">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="Persyaratan" placeholder="Ketik Manual" name="persyaratan[]">
+                                                    <input type="text" class="form-control persyaratan" placeholder="" name="persyaratan[]">
                                                     <div class="input-group-append">
                                                         <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                         <!-- Jadwal Training -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control"  readonly value="Jadwal Training">
-                                            <div class="col-md-2">
+                                            <input type="text"class="col-md-2 form-control"  readonly value="Jadwal Training">
+                                            <div class="col-md-1"> </div>
+                                            <div class="col-md-1">
                                                 
                                                 <input type="" readonly class="form-control" style="background-color: yellow" placeholder="Mulai">
                                             </div>
                                             <div class="col-md-7">
                                                 <div class="row">
-                                                    <div class="col">
-                                                        <select class="form-control" id="Jadwal Training Muali: Tanggal" name="jadwal_mulai_tanggal">
+                                                    <div class="col-2">
+                                                        <select class="form-control" id="jadwal_mulai_tanggal" name="jadwal_mulai_tanggal">
                                                             <option>Tanggal</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col">
-                                                        <select class="form-control" id="Jadwal Training Muali: Bulan" name="jadwal_mulai_bulan">
+                                                    <div class="col-2">
+                                                        <select class="form-control" id="jadwal_mulai_bulan" name="jadwal_mulai_bulan">
                                                             <option>Bulan</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col">
-                                                        <select class="form-control" id="Jadwal Training Muali: Tahun" name="jadwal_mulai_tahun">
+                                                    <div class="col-2">
+                                                        <select class="form-control" id="jadwal_mulai_tahun" name="jadwal_mulai_tahun">
                                                             <option>Tahun</option>
                                                         </select>
                                                     </div>
@@ -195,23 +210,23 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-md-2 offset-md-3">
+                                            <div class="col-md-1 offset-md-3">
                                                 <input type="text" class="form-control" style="background-color: yellow" placeholder="Selesai" >
                                             </div>
                                             <div class="col-md-7">
                                                 <div class="row">
-                                                    <div class="col">
-                                                        <select class="form-control" id="Jadwal Training Selesai: Tanggal" name="jadwal_selesai_tanggal">
+                                                    <div class="col-2">
+                                                        <select class="form-control" id="jadwal_selesai_tanggal" name="jadwal_selesai_tanggal">
                                                             <option>Tanggal</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col">
-                                                        <select class="form-control" id="Jadwal Training Selesai: Bulan" name="jadwal_selesai_bulan">
+                                                    <div class="col-2">
+                                                        <select class="form-control" id="jadwal_selesai_bulan" name="jadwal_selesai_bulan">
                                                             <option>Bulan</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col">
-                                                        <select class="form-control" id="Jadwal Training Selesai: Tahun" name="jadwal_selesai_tahun">
+                                                    <div class="col-2">
+                                                        <select class="form-control" id="jadwal_selesai_tahun" name="jadwal_selesai_tahun">
                                                             <option>Tahun</option>
                                                         </select>
                                                     </div>
@@ -220,40 +235,54 @@
                                         </div>
                                         <!-- Materi Training -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Materi Training">
+                                            <input type="text" class="col-md-2 form-control" readonly value="Materi Training">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-9">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="Materi Training" placeholder="XXXX" name="materi_training[]">
+                                                    <input type="text" class="form-control materi_training" placeholder="" name="materi_training[]">
                                                     <div class="input-group-append">
                                                         <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                       
+                                            
                                         <!-- Fasilitas -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Fasilitas">
+                                            <input type="text" class="col-md-2 form-control" readonly value="Fasilitas">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-9">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="Fasilitas" placeholder="XXXX" name="fasilitas[]">
+                                                    <input type="text" class="form-control fasilitas" placeholder="" name="fasilitas[]">
                                                     <div class="input-group-append">
                                                         <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                         <!-- Type -->
+                                        
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Type">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Type">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control" id="Type" placeholder="Online / Offline" name="type">
+                                                <select class="form-control" id="type" name="type">
+                                                    <option>Pilih Type</option>
+                                                    @foreach($listtype as $value)
+                                                        <option value="{{$value->id}}">{{$value->nama}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
+                                        
                                         <!-- Lokasi -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Lokasi">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Provinsi">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-5">
-                                                <select class="form-control" id="Lokasi" name="lokasi">
+                                                <select class="form-control" id="provinsi" name="provinsi">
                                                     <option>Pilih Provinsi</option>
                                                     @foreach($listprovinsi as $value)
                                                         <option value="{{$value->id}}">{{$value->nama}}</option>
@@ -261,12 +290,21 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <!-- Lokasi -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Lokasi">
+                                            <div class="col-md-1"> </div>
+                                            <div class="col-md-5"> 
+                                                <input type="text" class="form-control" id="lokasi" name="lokasi">
+                                            </div>
+                                        </div>
                                         <!-- Photo -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Photo">
+                                            <input type="text" class="col-md-2 form-control" readonly value="Photo">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-5">
                                                 <div class="input-group">
-                                                    <input type="file" class="form-control" id="Photo" name="photo[]">
+                                                    <input type="file" class="form-control photo" id="photo" name="photo[]">
                                                     <div class="input-group-append">
                                                         <button type="button" class="btn btn-primary btn-add" onclick="addInput(this)">+</button>
                                                     </div>
@@ -275,16 +313,18 @@
                                         </div>
                                         <!-- Link Pendaftaran -->
                                         <div class="form-group row">
-                                            <input type="text"class="col-md-3 form-control" readonly value="Link Pendaftaran">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Link Pendaftaran">
+                                            <div class="col-md-1"> </div>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" id="Link Pendaftaran" placeholder="Link Google Form / Ms Form" name="link_pendaftaran">
+                                                <input type="text" class="form-control" id="link_pendaftaran" placeholder="Link Google Form / Ms Form" name="link_pendaftaran">
                                             </div>
                                         </div>
                                         <!-- Buttons -->
                                         <div class="form-group row">
                                             <div class="col-md-6 offset-md-3">
-                                                <button type="button" class="btn btn-warning" onclick="previewForm()">Preview</button>
-                                                <button type="button" class="btn btn-success" id="publishButton">Publish</button>
+                                                <button type="button" id="preview-btn" class="btn btn-info">Preview</button>
+                                                <button type="button" id="pending-btn" class="btn btn-warning">Pending</button>
+                                                <button type="button" id="publish-btn" class="btn btn-primary">Publish</button>
                                             </div>
                                         </div>
                                     </div>
@@ -305,7 +345,16 @@
                         </div>
                         
                         <!-- Modal body -->
-                        <div class="modal-body" id="previewContent">
+                        <div class="modal-body">
+                            <!-- Content will be inserted here -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div id="modal-content">
+                                        
+                                        <!-- Dynamically filled by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <!-- Modal footer -->
@@ -361,6 +410,7 @@
 <script src="{{ asset('/') }}plugins/summernote/summernote-bs4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
     function addInput(button) {
         var inputGroup = $(button).closest('.input-group');
@@ -376,25 +426,150 @@
         $(button).closest('.input-group').remove();
     }
 
-    function previewForm() {
-        var previewContent = '<table class="table table-bordered">';
-        previewContent += '<tr><th>Field</th><th>Value</th></tr>';
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
 
-        // Iterate over each input field with an ID
-        $('#trainingForm input, #trainingForm select').each(function() {
-            var id = $(this).attr('id'); // Get the ID attribute
-            var value = $(this).val(); // Get the value of the input field
+        var parts = dateStr.split(' ')[0].split('-');
+        var date = new Date(parts[0], parts[1] - 1, parts[2]);
 
-            // Only display fields with an ID
-            if (id) {
-                previewContent += '<tr><td>' + id + '</td><td>' + value + '</td></tr>';
-            }
-        });
+        var day = date.getDate();
+        var month = date.toLocaleString('default', { month: 'long' });
+        var year = date.getFullYear();
 
-        previewContent += '</table>';
-        $('#previewContent').html(previewContent);
-        $('#previewModal').modal('show');
+        return day + ' ' + month + ' ' + year;
     }
+
+    $('#preview-btn').click(function() {
+        var categoryText = $('#category option:selected').text();
+        var jenis_sertifikasiText = $('#jenis_sertifikasi option:selected').text();
+        var typeText = $('#type option:selected').text();
+        var provinsiText = $('#provinsi option:selected').text();
+        var formData = {
+            title: $('#nama_training').val(),
+            category: categoryText,
+            jenis_sertifikasi: jenis_sertifikasiText,
+            training_duration: $('#training_duration').val(),
+            persyaratan: [],
+            materi_training: [],
+            fasilitas: [],
+            jadwal_mulai_tanggal: formatDate(`${$('#jadwal_mulai_tahun').val()}-${$('#jadwal_mulai_bulan').val()}-${$('#jadwal_mulai_tanggal').val()}`),
+            jadwal_selesai_tanggal: formatDate(`${$('#jadwal_selesai_tahun').val()}-${$('#jadwal_selesai_bulan').val()}-${$('#jadwal_selesai_tanggal').val()}`),
+            type: typeText,
+            provinsi: provinsiText,
+            lokasi: $('#lokasi').val(),
+            link_pendaftaran: $('#link_pendaftaran').val(),
+            status: 3
+        };
+
+        // Collect all dynamic inputs
+        $('.persyaratan').each(function() {
+            formData.persyaratan.push($(this).val());
+        });
+        $('.materi_training').each(function() {
+            formData.materi_training.push($(this).val());
+        });
+        $('.fasilitas').each(function() {
+            formData.fasilitas.push($(this).val());
+        });
+        
+        $('#modal-content').html(`
+            <div class="form-group row">
+                <label>Nama Training</label>
+                <input type="text" class="form-control" value="${formData.title}" readonly>
+            </div>
+             <div class="form-group row">
+                <label>Category</label>
+                <input type="text" class="form-control" value="${formData.category}" readonly>
+            </div>
+            <div class="form-group row">
+                <label>Jenis Sertifikasi</label>
+                <input type="text" class="form-control" value="${formData.jenis_sertifikasi}" readonly>
+            </div>
+            <div class="form-group row">
+                <label>Durasi Training</label>
+                <input type="text" class="form-control" value="${formData.training_duration}" readonly>
+            </div>
+            <div class="form-group row">
+                <label>Persyaratan</label>
+                ${formData.persyaratan.map(p => `<input type="text" class="form-control" value="${p}" readonly>`).join('')}
+            </div>
+
+            <div class="form-group row">
+                <label>Tanggal Mulai Training</label>
+                <input type="text" class="form-control" value="${formData.jadwal_mulai_tanggal}" readonly>
+            </div>
+
+
+            <div class="form-group row">
+                <label>Tanggal Selesai Training</label>
+                <input type="text" class="form-control" value="${formData.jadwal_selesai_tanggal}" readonly>
+            </div>
+
+            <div class="form-group row">
+                <label>Materi Training</label>
+                ${formData.materi_training.map(m => `<input type="text" class="form-control" value="${m}" readonly>`).join('')}
+            </div>
+            <div class="form-group row">
+                <label>Fasilitas</label>
+                ${formData.fasilitas.map(f => `<input type="text" class="form-control" value="${f}" readonly>`).join('')}
+            </div>
+
+            <div class="form-group row">
+                <label>Type</label>
+                <input type="text" class="form-control" value="${formData.type}" readonly>
+            </div>
+
+            <div class="form-group row">
+                <label>Provinsi</label>
+                <input type="text" class="form-control" value="${formData.provinsi}" readonly>
+            </div>
+
+            <div class="form-group row">
+                <label>Lokasi</label>
+                <input type="text" class="form-control" value="${formData.lokasi}" readonly>
+            </div>
+
+            <div class="form-group row">
+                <label>Link Pendaftaran</label>
+                <input type="text" class="form-control" value="${formData.link_pendaftaran}" readonly>
+            </div>
+        `);
+
+        var fileInput = document.querySelectorAll('.photo');
+        if (fileInput.length > 0) {
+            var imageUrls = [];
+            var filesLoaded = 0;
+
+            fileInput.forEach(function(input) {
+                var files = input.files;
+                if (files.length > 0) {
+                    for (var i = 0; i < files.length; i++) {
+                        (function(file) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                imageUrls.push(e.target.result);
+                                filesLoaded++;
+                                if (filesLoaded === fileInput.length) {
+                                    var imagesHtml = imageUrls.map((url, index) => `
+                                        <div class="form-group row" style=" text-align: left;">
+                                            <label for="picture">Photo ${index + 1}</label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <img src="${url}" alt="Preview Image ${index + 1}" class="img-thumbnail" width="250px">
+                                        </div>
+                                    `).join('');
+                                    $('#modal-content').append(imagesHtml);
+                                }
+                            };
+                            reader.readAsDataURL(file);
+                        })(files[i]);
+                    }
+                }
+            });
+        }
+
+        $('#previewModal').modal('show');
+    });
 
     function showLoading() {
         $('#loadingOverlay').show();
@@ -403,13 +578,25 @@
     function hideLoading() {
         $('#loadingOverlay').hide();
     }
-
+    $('input[type="file"]').change(function(e) {
+            console.log('Picture Changed');
+            var files = [];
+            for (var i = 0; i < $(this)[0].files.length; i++) {
+                files.push($(this)[0].files[i].name);
+            }
+            const [file] = $(this)[0].files;
+            if (file) {
+                $(".simulasi-gambar-" + this.id).attr("src", URL.createObjectURL(file));
+            }
+            $(this).next(".custom-file-label").html(files.join(", "));
+    });
     $(document).ready(function() {
         // Initialize Select2
         $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_mulai_bulan"], select[name="jadwal_mulai_tahun"]').select2();
         $('select[name="jadwal_selesai_tanggal"], select[name="jadwal_selesai_bulan"], select[name="jadwal_selesai_tahun"]').select2();
         $('select[name="category"], select[name="jenis_sertifikasi"]').select2();
         $('select[name="lokasi"]').select2();
+        $('select[name="type"]').select2();
 
         // Populate days
         for (let i = 1; i <= 31; i++) {
@@ -427,12 +614,23 @@
         for (let i = currentYear; i <= currentYear + 10; i++) {
             $('select[name="jadwal_mulai_tahun"], select[name="jadwal_selesai_tahun"]').append(`<option value="${i}">${i}</option>`);
         }
+        
+        $('#pending-btn').click(function() {
+            submitFormWithStatus(2);
+        });
 
-        $('#publishButton').click(function() {
-            showLoading(); // Show loading indicator
+        $('#publish-btn').click(function() {
+            submitFormWithStatus(1);
+        });
 
-            var form = $('#trainingForm')[0]; // Get the form element
-            var formData = new FormData(form); // Create FormData object
+        function submitFormWithStatus(status) {
+            var formData = new FormData($('#training-form')[0]);
+            formData.append('status', status);
+
+            var fileInput = $('#photo')[0];
+            for (var i = 0; i < fileInput.files.length; i++) {
+                formData.append('photo[]', fileInput.files[i]);
+            }
 
             $.ajaxSetup({
                 headers: {
@@ -440,12 +638,14 @@
                 }
             });
 
+            showLoading(); // Show loading indicator
+
             $.ajax({
-                url: '/public/store-course-endpoint', // Replace with your API endpoint
+                url: '/store-course-endpoint',
                 type: 'POST',
                 data: formData,
-                contentType: false, // Set to false for multipart/form-data
-                processData: false, // Set to false to prevent jQuery from processing the data
+                processData: false,
+                contentType: false,
                 success: function(response) {
                     hideLoading(); // Hide loading indicator
                     $('#successModal').modal('show');
@@ -456,22 +656,22 @@
                     }, 2000);
 
                     $('#previewModal').modal('hide');
-                    $('#trainingForm')[0].reset(); // Correct ID of the form
+                    $('#training-form')[0].reset();
                 },
                 error: function(xhr, status, error) {
                     hideLoading(); // Hide loading indicator
                     var errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan. Silakan coba lagi.';
-                    $('#errorModal .modal-body').text(errorMessage); // Update error message in the modal
+                    $('#error-message').text('Terjadi kesalahan. Silakan coba lagi');
                     $('#errorModal').modal('show');
 
-                    //Optionally, you can auto-close the error modal after some time
                     setTimeout(function() {
                         $('#errorModal').modal('hide');
                         location.reload();
                     }, 2000);
                 }
             });
-        });
+        }
+        
     });
 </script>
 

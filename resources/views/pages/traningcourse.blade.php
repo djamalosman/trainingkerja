@@ -2,7 +2,7 @@
 
 @section('headers')
 <link rel="stylesheet" href="{{ asset('/') }}plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 <style>
     /* Style the input field */
     #myInput {
@@ -90,6 +90,7 @@
                                                     <th>Category</th> 
                                                     <th>Nama Sertifikat</th>
                                                     <th>Tanggal Mulai dan Selesai</th>
+                                                    <th>Type</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -107,6 +108,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -135,6 +137,19 @@
                                 <!-- Options will be appended here -->
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="typeonlineoflineSelect">Type</label>
+                            <select id="typeonlineoflineSelect" class="form-control">
+                                <!-- Options will be appended here -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statusSelect">Status</label>
+                            <select id="statusSelect" class="form-control">
+                                <!-- Options will be appended here -->
+                            </select>
+                        </div>
                         
                     </div>
                     <div class="modal-footer">
@@ -144,6 +159,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="edit-item" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="edit-item-label" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-item-label">
+                            Edit Data
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="edit-data-list-item">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 </div>
 @endsection
@@ -153,7 +186,7 @@
 <script src="{{ asset('/') }}plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="{{ asset('/') }}plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="{{ asset('/') }}plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
 function escapeHtml(unsafe) {
     if (typeof unsafe !== 'string') {
@@ -199,12 +232,27 @@ $(document).ready(function() {
     // Initialize dropdown data and table data on page load
     loadDropdownData();
     loadTableData();
-
-    // Show modal on filter button click
     $('#filterButton').on('click', function() {
         $('#filterModal').modal('show');
     });
 
+    $('#filterModal').on('shown.bs.modal', function() {
+        $('#traningNameSelect').select2({
+            dropdownParent: $('#filterModal')
+        });
+        $('#categorySelect').select2({
+            dropdownParent: $('#filterModal')
+        });
+        $('#certificateTypeSelect').select2({
+            dropdownParent: $('#filterModal')
+        });
+        $('#typeonlineoflineSelect').select2({
+            dropdownParent: $('#filterModal')
+        });
+        $('#statusSelect').select2({
+            dropdownParent: $('#filterModal')
+        });
+    });
     // Handle apply filter button click
     $('#applyFilter').on('click', function() {
         applyFilterAndReset();
@@ -220,12 +268,16 @@ $(document).ready(function() {
         var traningName = $('#traningNameSelect').val();
         var category = $('#categorySelect').val();
         var certificateType = $('#certificateTypeSelect').val();
+        var typeonlineofline = $('#typeonlineoflineSelect').val();
+        var status = $('#statusSelect').val();
 
         // Load table data based on selected filter
         loadTableData({
             traning_name: traningName,
             category: category,
-            cetificate_type: certificateType
+            cetificate_type: certificateType,
+            typeonlineofline: typeonlineofline,
+            status_training: status
         });
 
         $('#filterModal').modal('hide'); // Hide the modal
@@ -237,36 +289,48 @@ $(document).ready(function() {
         $('#traningNameSelect').val('');
         $('#categorySelect').val('');
         $('#certificateTypeSelect').val('');
+        $('#typeonlineoflineSelect').val('');
+        $('#statusSelect').val('');
     }
 
     // Function to populate dropdown list
     function loadDropdownData() {
         $.ajax({
-            url: '/public/get-datacourse-filters', // URL endpoint to fetch data
+            url: '/get-datacourse-filters', // URL endpoint to fetch data
             type: 'GET',
             success: function(data) {
                 var traningNameSelect = $('#traningNameSelect');
                 var categorySelect = $('#categorySelect');
                 var certificateTypeSelect = $('#certificateTypeSelect');
+                var typeonlineoflineSelect = $('#typeonlineoflineSelect');
+                var statusSelect = $('#statusSelect');
 
                 traningNameSelect.empty(); // Clear existing items
                 categorySelect.empty(); // Clear existing items
                 certificateTypeSelect.empty(); // Clear existing items
+                typeonlineoflineSelect.empty(); // Clear existing items
+                statusSelect.empty(); // Clear existing items
 
                 // Append "All" option to the select elements
                 traningNameSelect.append('<option value="">All</option>');
                 categorySelect.append('<option value="">All</option>');
                 certificateTypeSelect.append('<option value="">All</option>');
+                typeonlineoflineSelect.append('<option value="">All</option>');
+                statusSelect.append('<option value="">All</option>');
 
                 // Using Sets to store unique items
                 var uniqueTraningNames = new Set();
                 var uniqueCategories = new Set();
                 var uniqueCetificateTypes = new Set();
+                var uniqueTypeonlineofline = new Set();
+                var uniqueStatus = new Set();
 
                 $.each(data, function(key, value) {
                     uniqueTraningNames.add(value.traning_name);
                     uniqueCategories.add(value.category);
                     uniqueCetificateTypes.add(value.cetificate_type);
+                    uniqueTypeonlineofline.add(value.typeonlineofline);
+                    uniqueStatus.add(value.status_training);
                 });
 
                 // Function to append unique items to the select elements
@@ -280,6 +344,8 @@ $(document).ready(function() {
                 appendUniqueItems(uniqueTraningNames, traningNameSelect);
                 appendUniqueItems(uniqueCategories, categorySelect);
                 appendUniqueItems(uniqueCetificateTypes, certificateTypeSelect);
+                appendUniqueItems(uniqueTypeonlineofline, typeonlineoflineSelect);
+                appendUniqueItems(uniqueStatus, statusSelect);
             },
             error: function() {
                 console.log("Error fetching data.");
@@ -290,7 +356,7 @@ $(document).ready(function() {
     // Function to load table data
     function loadTableData(filterValues) {
         $.ajax({
-            url: '/public/get-data-course',
+            url: '/get-data-course',
             type: 'GET',
             data: filterValues,
             success: function(data) {
@@ -298,18 +364,41 @@ $(document).ready(function() {
                 table.clear().draw();
 
                 $.each(data, function(key, value) {
-                    var statusBadge = value.status == '1' 
-                    ? '<span class="badge badge-primary">Publish</span>'
-                    : '<span class="badge badge-warning">Pending</span>';
+                    var statusBadge = 
+                    value.status == '1' ? '<span class="badge badge-primary">Publish</span>' :
+                    value.status == '2' ? '<span class="badge badge-warning">Pending</span>' :
+                    value.status == '3' ? '<span class="badge badge-secondary">Non Publish</span>' :
+                    value.status == '0' ? '<span class="badge badge-danger">Kadaluarsa</span>' :
+                    '<span class="badge badge-dark">Unknown Status</span>';
                     table.row.add([
                         key + 1,
                         value.traning_name,
                         value.category,
                         value.cetificate_type,
                         formatDateRange(value.startdate, value.enddate),
+                        value.typeonlineofline,
                         statusBadge,
-                        '<div class="container mt-12"> <div class="row button-container"><div class="col-6 text-left"><a type="button" href="/public/edit-traningcourse/' + btoa(value.id) + '" class="btn btn-warning"><i class="fa fa-bars"></i></a></div>' +
-                        '<div class="col-6 text-left"><button type="button" onclick="deletePrompt(\'' + value.id + '\')" class="btn btn-danger"><i class="fa fa-trash"></i></button></div></div> </div>'
+                        `
+                                <div class="container mt-1">
+                                    <div class="row button-container">
+                                        <div class="col-4 text-left mb-3">
+                                            <a type="button" style="color:Green" href="/edit-traningcourse/${btoa(value.id)}"title="Edit Course" >
+                                                <i class="fa fa-bars"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-4 text-left mb-3">
+                                            <a type="button" style="color:Blue" onclick="copyDataToModal('${value.id}')" href="#" title="Copy Course">
+                                                <i class="fa fa-clipboard"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-4 text-left mb-3">
+                                             <a type="button" href="#" style="color:red" onclick="stopPrompt('${value.id}')"title="Stop Course">
+                                                <i class="fa fa-stop"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `
                     ]).draw(false);
                 });
             },
@@ -343,22 +432,46 @@ $(document).ready(function() {
         document.getElementById('side_list1').value = selectedValue;
         document.getElementById('side_list_en1').value = selectedValue;
     }
-    // $(function() {
-    //     $('#side-list-visi-misi').DataTable({
-    //         "paging": true,
-    //         "pageLength": 5,
-    //         "lengthChange": false,
-    //         "searching": true,
-    //         "ordering": true,
-    //         "info": true,
-    //         "autoWidth": false,
-    //         "responsive": true,
-    //     });
-        
-    // });
 
-    function deletePrompt(id) {
-        var url = "{{ route('delete-side-list',':id') }}";
+    function copyDataToModal(id) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+        });
+
+        var url = "{{ route('copy-training-course-list',':id') }}";
+        url = url.replace(":id", id);
+        $.ajax({
+            url: url,
+            type: "GET",
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                data = JSON.parse(data);
+                if (data["status"] == "success") {
+                    $("#edit-data-list-item").html(data["output"]);
+                    $("#edit-item").modal("toggle");
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: data["message"],
+                    });
+                }
+            },
+            error: function(reject) {
+                Toast.fire({
+                    icon: "error",
+                    title: "Something went wrong",
+                });
+            },
+        });
+    }
+    
+    function stopPrompt(id) {
+        var url = "{{ route('stop-data-course',':id') }}";
         url = url.replace(":id", id);
 
         const Toast = Swal.mixin({
@@ -370,9 +483,9 @@ $(document).ready(function() {
         });
 
         Swal.fire({
-            title: "Delete data?",
+            title: "Stop data?",
             showCancelButton: true,
-            confirmButtonText: "Delete",
+            confirmButtonText: "Stop",
             confirmButtonColor: "#d33",
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */

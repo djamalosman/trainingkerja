@@ -410,7 +410,7 @@ use Illuminate\Support\Facades\Route;
             Route::post('/update-course-endpoint', [TrainingCourseController::class, 'updateCourseEndpoint'])->name('update-course-endpoint');
 
             Route::get('/remove-persyaratan-endpoint/{id}', [TrainingCourseController::class, 'removePersyaratanEndpoint'])
-                ->name('public/remove-persyaratan-endpoint');
+                ->name('remove-persyaratan-endpoint');
 
             Route::get('/remove-materitraining-endpoint/{id}', [TrainingCourseController::class, 'removeMateriTrainingEndpoint'])
                 ->name('remove-materitraining-endpoint');
@@ -423,6 +423,18 @@ use Illuminate\Support\Facades\Route;
 
             Route::get('/remove-trainingcourse/{id}', [TrainingCourseController::class, 'removePTrainingCourse'])
                 ->name('remove-trainingcourse');
+
+            Route::get('/stop-data-course/{id}', [TrainingCourseController::class, 'stopTrainingCourse'])
+                ->name('stop-data-course');
+
+            Route::get('/copy-training-course-list/{id}', [TrainingCourseController::class, 'copyTrainingCourseList'])
+                ->name('copy-training-course-list');
+
+            Route::put('/update-copy-training-course', [TrainingCourseController::class, 'updateCopyTrainingCourseList'])
+                ->name('update-copy-training-course');
+
+            Route::get('/delete-data-course/{id}', [TrainingCourseController::class, 'removePTrainingCourse'])
+                ->name('delete-data-course');
 
             Route::post('/store-course', [TrainingCourseController::class, 'storeCourse'])
                 ->name('store-course');

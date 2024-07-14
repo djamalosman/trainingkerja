@@ -23,6 +23,7 @@ use App\Models\dtc_File_TrainingCourseModel;
 use App\Models\Dtc_Materi_TrainingCourseModel;
 use App\Models\Dtc_Fasilitas_TrainingCourseModel;
 use App\Models\M_ProvinsiModel;
+use App\Models\M_type_TrainingCourseModel;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -34,6 +35,29 @@ use PDO;
 
 class TrainingCourseController extends Controller
 {
+
+    public function generateNumber()
+    {
+        // Fetch the last number from the database
+        $lastRecord = TraningCourseDetailsModel::whereDate('created_at', Carbon::today())
+            ->orderBy('generatenumber', 'desc')
+            ->first();
+
+        // Determine the last number part, if it exists
+        $lastNumber = $lastRecord ? $lastRecord->generatenumber : null;
+        $lastNumberPart = $lastNumber ? intval(substr($lastNumber, 4, 3)) : 0;
+
+        // Generate new number
+        $newNumberPart = str_pad($lastNumberPart + 1, 3, '0', STR_PAD_LEFT);
+
+        // Format the new number with the current date
+        $datePart = Carbon::now()->format('dmy');
+
+        return "TRC-{$newNumberPart}-{$datePart}";
+    }
+    
+
+
     public function traningCourse($id)
     {
         $data['menus'] = MenuModel::find(base64_decode($id));
@@ -47,22 +71,41 @@ class TrainingCourseController extends Controller
 
     public function getFilters() {
         $filters = DB::table('dtc_training_course_detail')
-            ->join('m_category_training_course', 'm_category_training_course.id', '=', 'dtc_training_course_detail.id_m_category_training_course') // Bergabung dengan tabel tipe_master
-            ->join('m_jenis_sertifikasi_training_course', 'm_jenis_sertifikasi_training_course.id', '=', 'dtc_training_course_detail.id_m_jenis_sertifikasi_training_course') // Bergabung dengan tabel ifg_master_tipe
-            ->select('dtc_training_course_detail.*', 'm_category_training_course.nama as category','m_jenis_sertifikasi_training_course.nama as cetificate_type') // Pilih kolom yang dibutuhkan
-            ->distinct()
-            ->get();
+        ->leftJoin('m_category_training_course', 'm_category_training_course.id', '=', 'dtc_training_course_detail.id_m_category_training_course')
+        ->leftJoin('m_jenis_sertifikasi_training_course', 'm_jenis_sertifikasi_training_course.id', '=', 'dtc_training_course_detail.id_m_jenis_sertifikasi_training_course')
+        ->leftJoin('m_type_training_course', 'm_type_training_course.id', '=', 'dtc_training_course_detail.typeonlineoffile')
+        ->select(
+            'dtc_training_course_detail.traning_name',
+            DB::raw('CASE 
+                        WHEN dtc_training_course_detail.status = 1 THEN "Publish"
+                        WHEN dtc_training_course_detail.status = 2 THEN "Pending"
+                        WHEN dtc_training_course_detail.status = 3 THEN "Non Publish"
+                        WHEN dtc_training_course_detail.status = 0 THEN "Kadaluarsa"
+                        ELSE "Unknown"
+                    END as status_training'),
+            'm_category_training_course.nama as category',
+            'm_jenis_sertifikasi_training_course.nama as cetificate_type',
+            'm_type_training_course.nama as typeonlineofline'
+        ) ->distinct() ->get();
+
+       // Mendapatkan semua tipe pelatihan yang unik
+        // $filters['typeonlineofline'] = M_type_TrainingCourseModel::select('nama')->distinct()->get();
+        // $filters['category'] = M_Category_TrainingCourseModel::select('nama')->distinct()->get();
+        // $filters['cetificate_type'] = M_Jenis_Sertifikasi_TrainingCourseModel::select('nama')->distinct()->get();
+        // $filters['traning_name'] = TraningCourseDetailsModel::select('traning_name')->distinct()->get();
+        // $filters['status'] = TraningCourseDetailsModel::select('status')->distinct()->get();
+
         return response()->json($filters);
     }
     
     public function getDataCourses(Request $request) {
-        // Membuat query untuk tabel training_course_detail
 
         //dd($request->all());
         $query = DB::table('dtc_training_course_detail')
-        ->join('m_category_training_course', 'm_category_training_course.id', '=', 'dtc_training_course_detail.id_m_category_training_course') // Bergabung dengan tabel tipe_master
-        ->join('m_jenis_sertifikasi_training_course', 'm_jenis_sertifikasi_training_course.id', '=', 'dtc_training_course_detail.id_m_jenis_sertifikasi_training_course') // Bergabung dengan tabel ifg_master_tipe
-        ->select('dtc_training_course_detail.*', 'm_category_training_course.nama as category','m_jenis_sertifikasi_training_course.nama as cetificate_type'); // Pilih kolom yang dibutuhkan
+        ->leftjoin('m_category_training_course', 'm_category_training_course.id', '=', 'dtc_training_course_detail.id_m_category_training_course') // Bergabung dengan tabel tipe_master
+        ->leftjoin('m_jenis_sertifikasi_training_course', 'm_jenis_sertifikasi_training_course.id', '=', 'dtc_training_course_detail.id_m_jenis_sertifikasi_training_course') // Bergabung dengan tabel ifg_master_tipe
+        ->leftjoin('m_type_training_course', 'm_type_training_course.id', '=', 'dtc_training_course_detail.typeonlineoffile')
+        ->select('dtc_training_course_detail.*', 'm_category_training_course.nama as category','m_jenis_sertifikasi_training_course.nama as cetificate_type','m_type_training_course.nama as typeonlineofline'); // Pilih kolom yang dibutuhkan
 
         // Menerapkan filter berdasarkan parameter yang tersedia
         if ($request->has('traning_name') && $request->traning_name != '') {
@@ -76,9 +119,22 @@ class TrainingCourseController extends Controller
         if ($request->cetificate_type != '') {
             $query->where('m_jenis_sertifikasi_training_course.nama', 'LIKE', '%' . $request->cetificate_type . '%');
         }
-        
-        if ($request->has('status') && $request->status != '') {
-            $query->where('dtc_training_course_detail.status', 'LIKE', '%' . $request->status . '%');
+        if ($request->status_training != '') {
+            
+            if ( $request->status_training  =='Publish') {
+                $query->where('dtc_training_course_detail.status',1);
+            }
+            elseif ( $request->status_training  == 'Pending') {
+                $query->where('dtc_training_course_detail.status',2);
+            }
+            elseif ($request->status_training  =='Kadaluarsa') {
+                $query->where('dtc_training_course_detail.status',0);
+            }
+            
+        }
+
+        if ($request->typeonlineofline != '') {
+            $query->where('m_type_training_course.id',$request->typeonlineofline);
         }
     
         // Mengambil hasil query
@@ -99,6 +155,7 @@ class TrainingCourseController extends Controller
         $data['liscategory'] = M_Category_TrainingCourseModel::all();
         $data['listsertifikasi'] = M_Jenis_Sertifikasi_TrainingCourseModel::all();
         $data['listprovinsi'] = M_ProvinsiModel::all();
+        $data['listtype'] = M_type_TrainingCourseModel::all();
 
       
         
@@ -108,10 +165,11 @@ class TrainingCourseController extends Controller
 
     public function storeCourseEndpoint(Request $req)
     {
+       // $this->generateNumber();
        
         try {
            
-
+            //dd($req->all());
             $jadwalMulai = Carbon::createFromDate(
                 $req->jadwal_mulai_tahun,
                 $req->jadwal_mulai_bulan,
@@ -124,7 +182,7 @@ class TrainingCourseController extends Controller
                 $req->jadwal_selesai_tanggal
             )->toDateString();
 
-            $idProvinsi = $req->id_provinsi === 'Pilih Provinsi' ? 0 : $req->id_provinsi;
+            $idProvinsi = $req->provinsi === 'Pilih Provinsi' ? 0 : $req->provinsi;
 
             $listItem = new TraningCourseDetailsModel();
             $listItem->traning_name                 = $req->nama_training;
@@ -135,8 +193,10 @@ class TrainingCourseController extends Controller
             $listItem->enddate                      = $jadwalSelesai;
             $listItem->typeonlineoffile             = $req->type;
             $listItem->id_provinsi                  = $idProvinsi;
+            $listItem->lokasi                       = $req->lokasi;
             $listItem->link_pendaftaran             = $req->link_pendaftaran;
-            $listItem->status                       = 1;
+            $listItem->status                       = $req->status;
+            $listItem->generatenumber               = $this->generateNumber(); // Generate the number
             $listItem->insert_by                    = session()->get('id');
             $listItem->updated_by                   = session()->get('id');
             $listItem->updated_by_ip                = $req->ip();
@@ -255,6 +315,7 @@ class TrainingCourseController extends Controller
         $data['liscategory'] = M_Category_TrainingCourseModel::all();
         $data['listsertifikasi'] = M_Jenis_Sertifikasi_TrainingCourseModel::all();
         $data['listprovinsi'] = M_ProvinsiModel::all();
+        $data['listtype'] = M_type_TrainingCourseModel::all();
 
         $data['listpersyaratan'] =  Dtc_Persyaratan_TrainingCourseModel::where('id_training_course_dtl',base64_decode($id))->get();
         $data['listmateri'] =  Dtc_Materi_TrainingCourseModel::where('id_training_course_dtl',base64_decode($id))->get();
@@ -284,7 +345,7 @@ class TrainingCourseController extends Controller
     {
        
         try {
-           
+           //dd($req->all());
             $jadwalMulai = Carbon::createFromDate(
                 $req->jadwal_mulai_tahun,
                 $req->jadwal_mulai_bulan,
@@ -297,7 +358,7 @@ class TrainingCourseController extends Controller
                 $req->jadwal_selesai_tanggal
             )->toDateString();
 
-            $idProvinsi = $req->id_provinsi === 'Pilih Provinsi' ? 0 : $req->id_provinsi;
+            $idProvinsi = $req->provinsi === 'Pilih Provinsi' ? 0 : $req->provinsi;
 
 
             $listItem = TraningCourseDetailsModel::find($req->iddtl);
@@ -309,8 +370,9 @@ class TrainingCourseController extends Controller
             $listItem->enddate                      = $jadwalSelesai;
             $listItem->typeonlineoffile             = $req->type;
             $listItem->id_provinsi                  = $idProvinsi;
+            $listItem->lokasi                       = $req->lokasi;
             $listItem->link_pendaftaran             = $req->link_pendaftaran;
-            $listItem->status                       = 1;
+            $listItem->status                       = $req->status;
             $listItem->insert_by                    = session()->get('id');
             $listItem->updated_by                   = session()->get('id');
             $listItem->updated_by_ip                = $req->ip();
@@ -524,6 +586,81 @@ class TrainingCourseController extends Controller
             'status' => 'success',
             'message' => 'Data berhasil disimpan'
         ];
+        return json_encode($response);
+    }
+
+
+    public function stopTrainingCourse ($id)
+    {
+        
+        $listItem = TraningCourseDetailsModel::find($id);
+            $listItem->status                       = 3;
+            $listItem->insert_by                    = session()->get('id');
+            $listItem->updated_by                   = session()->get('id');
+            $listItem->updated_by_ip                = $req->ip();
+            $listItem->save();
+        $response = [
+            'status' => 'success',
+            'message' => 'Data berhasil diupdate'
+        ];
+        return json_encode($response);
+    }
+
+    public function copyTrainingCourseList($id)
+    {
+        try {
+            $dt_list_item =  TraningCourseDetailsModel::find($id);
+            $output = View::make("components.copy-training-course-modal")
+                ->with("dt_item", $dt_list_item)
+                ->with("route", route('update-copy-training-course'))
+                ->with("formId", "copy-training-course-edit")
+                ->with("formMethod", "PUT")
+                ->render();
+            
+            $response = [
+                'status' => 'success',
+                'output'  => $output,
+                'message' => 'Berhasil Parsing',
+            ];
+            return json_encode($response);
+        } catch (ModelNotFoundException $e) {
+            $response = [
+                'status' => 'failed',
+                'message' => "Terjadi Kesalahan pada sistem.",
+            ];
+        }
+        return json_encode($response);
+    }
+
+    
+    public function updateCopyTrainingCourseList(Request $req)
+    {
+       
+        try {
+            
+            $listItem = TraningCourseDetailsModel::find($req->upt_id);
+            $listItem->link_pendaftaran             = $req->link_pendaftaran;
+
+            $listItem->save();
+            $response = [
+                'status' => 'success',
+                'message' => 'Data berhasil disimpan'
+            ];
+        } catch (ModelNotFoundException $e) {
+            $response = [
+                'status' => 'failed',
+                'message' => "Terjadi Kesalahan pada sistem : " . $e,
+            ];
+        }
+
+        $log_app = new LogApp();
+        $log_app->method = $req->method();
+        $log_app->request =  "Update Traning Course";
+        $log_app->response =  json_encode($response);
+        $log_app->pages = 'Traning';
+        $log_app->user_id = session()->get('id');
+        $log_app->ip_address = $req->ip();
+        $log_app->save();
         return json_encode($response);
     }
 
