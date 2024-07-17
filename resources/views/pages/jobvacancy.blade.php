@@ -401,7 +401,7 @@
                             <div class="container mt-1">
                                 <div class="row button-container">
                                     <div class="col-4 text-left mb-3">
-                                        <a type="button" style="color:Green" href="/edit-jobvacancy/${btoa(value.id)}" title="Edit Course">
+                                        <a type="button" style="color:Green" href="/public/edit-jobvacancy/${btoa(value.id)}" title="Edit Course">
                                             <i class="fa fa-bars"></i>
                                         </a>
                                     </div>
