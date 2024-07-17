@@ -936,7 +936,7 @@
             timerProgressBar: true,
         });
 
-        var url = "{{ route('/public/edit-traningcourse-detail',':id') }}";
+        var url = "{{ route('edit-traningcourse-detail',':id') }}";
         url = url.replace(":id", id);
         $.ajax({
             url: url,
