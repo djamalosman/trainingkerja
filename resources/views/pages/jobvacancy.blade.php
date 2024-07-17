@@ -302,7 +302,7 @@
         // Function to populate dropdown list
         function loadDropdownData() {
             $.ajax({
-                url: '/get-filters-job', // URL endpoint to fetch data
+                url: '/public/get-filters-job', // URL endpoint to fetch data
                 type: 'GET',
                 success: function(data) {
                     var job_titleSelect = $('#jobTitleSelect');
@@ -373,7 +373,7 @@
         // Function to load table data
         function loadTableData(filterValues) {
             $.ajax({
-                url: '/get-data-job',
+                url: '/public/get-data-job',
                 type: 'GET',
                 data: filterValues,
                 success: function(data) {

@@ -608,7 +608,7 @@
             });
 
             $.ajax({
-                url: '/remove-persyaratan-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-persyaratan-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -638,7 +638,7 @@
             });
 
             $.ajax({
-                url: 'remove-materitraining-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-materitraining-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -668,7 +668,7 @@
             });
 
             $.ajax({
-                url: 'remove-fasilitas-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-fasilitas-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -698,7 +698,7 @@
             });
 
             $.ajax({
-                url: 'remove-photo-endpoint/' + inputId, // Ganti dengan endpoint API Anda
+                url: '/public/remove-photo-endpoint/' + inputId, // Ganti dengan endpoint API Anda
                 type: 'GET',
                 success: function(response) {
                     $formGroup.remove();
@@ -1014,7 +1014,7 @@
             showLoading(); // Show loading indicator
 
             $.ajax({
-                url: '/update-course-endpoint',
+                url: '/public/update-course-endpoint',
                 type: 'POST',
                 data: formData,
                 processData: false,

@@ -706,7 +706,7 @@
             showLoading(); // Show loading indicator
 
             $.ajax({
-                url: '/update-job-vacancy',
+                url: '/public/update-job-vacancy',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -869,7 +869,7 @@
         });
     });
     function deletePrompt(id) {
-        var url = "{{ route('pages-list-detail-delete',':id') }}";
+        var url = "{{ route('/public/pages-list-detail-delete',':id') }}";
         url = url.replace(":id", id);
 
         const Toast = Swal.mixin({
@@ -936,7 +936,7 @@
             timerProgressBar: true,
         });
 
-        var url = "{{ route('edit-traningcourse-detail',':id') }}";
+        var url = "{{ route('/public/edit-traningcourse-detail',':id') }}";
         url = url.replace(":id", id);
         $.ajax({
             url: url,

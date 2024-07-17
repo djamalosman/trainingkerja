@@ -701,7 +701,7 @@ $(document).ready(function() {
             showLoading(); // Show loading indicator
 
             $.ajax({
-                url: '/store-jobvacancy',
+                url: '/public/store-jobvacancy',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -776,7 +776,7 @@ $(document).ready(function() {
         });
     });
     function deletePrompt(id) {
-        var url = "{{ route('pages-list-detail-delete',':id') }}";
+        var url = "{{ route('/public/pages-list-detail-delete',':id') }}";
         url = url.replace(":id", id);
 
         const Toast = Swal.mixin({
@@ -843,7 +843,7 @@ $(document).ready(function() {
             timerProgressBar: true,
         });
 
-        var url = "{{ route('edit-traningcourse-detail',':id') }}";
+        var url = "{{ route('/public/edit-traningcourse-detail',':id') }}";
         url = url.replace(":id", id);
         $.ajax({
             url: url,

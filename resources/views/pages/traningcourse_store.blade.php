@@ -674,7 +674,7 @@
             showLoading(); // Show loading indicator
 
             $.ajax({
-                url: '/store-course-endpoint',
+                url: '/public/store-course-endpoint',
                 type: 'POST',
                 data: formData,
                 processData: false,

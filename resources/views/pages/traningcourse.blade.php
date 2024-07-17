@@ -443,7 +443,7 @@ $(document).ready(function() {
             timerProgressBar: true,
         });
 
-        var url = "{{ route('copy-training-course-list',':id') }}";
+        var url = "{{ route('/public/copy-training-course-list',':id') }}";
         url = url.replace(":id", id);
         $.ajax({
             url: url,
@@ -472,7 +472,7 @@ $(document).ready(function() {
     }
     
     function stopPrompt(id) {
-        var url = "{{ route('stop-data-course',':id') }}";
+        var url = "{{ route('/public/stop-data-course',':id') }}";
         url = url.replace(":id", id);
 
         const Toast = Swal.mixin({
