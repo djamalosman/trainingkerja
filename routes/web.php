@@ -396,11 +396,11 @@ use Illuminate\Support\Facades\Route;
             Route::get('/traningcourse/{id}', [TrainingCourseController::class, 'traningcourse'])
                 ->name('traningcourse');
 
-            Route::get('/public/get-datacourse-filters', [TrainingCourseController::class, 'getFilters'])
-                ->name('public/get-datacourse-filters');
+            Route::get('/get-datacourse-filters', [TrainingCourseController::class, 'getFilters'])
+                ->name('get-datacourse-filters');
 
-            Route::get('/public/get-data-course', [TrainingCourseController::class, 'getDataCourses'])
-                ->name('public/get-data-course');
+            Route::get('/get-data-course', [TrainingCourseController::class, 'getDataCourses'])
+                ->name('get-data-course');
 
             Route::get('/get-view-store-traningcourse/{id}', [TrainingCourseController::class, 'ViewsStoretraningcourse'])
                 ->name('get-view-store-traningcourse');

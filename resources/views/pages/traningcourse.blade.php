@@ -296,7 +296,7 @@ $(document).ready(function() {
     // Function to populate dropdown list
     function loadDropdownData() {
         $.ajax({
-            url: '/get-datacourse-filters', // URL endpoint to fetch data
+            url: '/public/get-datacourse-filters', // URL endpoint to fetch data
             type: 'GET',
             success: function(data) {
                 var traningNameSelect = $('#traningNameSelect');
@@ -356,7 +356,7 @@ $(document).ready(function() {
     // Function to load table data
     function loadTableData(filterValues) {
         $.ajax({
-            url: '/get-data-course',
+            url: '/public/get-data-course',
             type: 'GET',
             data: filterValues,
             success: function(data) {
