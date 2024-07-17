@@ -869,7 +869,7 @@
         });
     });
     function deletePrompt(id) {
-        var url = "{{ route('/public/pages-list-detail-delete',':id') }}";
+        var url = "{{ route('pages-list-detail-delete',':id') }}";
         url = url.replace(":id", id);
 
         const Toast = Swal.mixin({
