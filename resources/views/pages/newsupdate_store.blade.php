@@ -603,64 +603,64 @@ $(document).ready(function() {
             "responsive": true,
         });
     });
-    function deletePrompt(id) {
-        var url = "{{ route('/public/pages-list-detail-delete',':id') }}";
-        url = url.replace(":id", id);
+    // function deletePrompt(id) {
+    //     var url = "{{ route('/public/pages-list-detail-delete',':id') }}";
+    //     url = url.replace(":id", id);
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-        });
+    //     const Toast = Swal.mixin({
+    //         toast: true,
+    //         position: "top-end",
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //         timerProgressBar: true,
+    //     });
 
-        Swal.fire({
-            title: "Delete data?",
-            showCancelButton: true,
-            confirmButtonText: "Delete",
-            confirmButtonColor: "#d33",
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        data = JSON.parse(data);
-                        if (data["status"] == "success") {
-                            Toast.fire({
-                                icon: "success",
-                                title: data["message"],
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            Toast.fire({
-                                icon: "error",
-                                title: data["message"],
-                            });
-                        }
-                    },
-                    error: function(reject) {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Something went wrong",
-                        });
-                    },
-                });
-            }
-        });
-    }
+    //     Swal.fire({
+    //         title: "Delete data?",
+    //         showCancelButton: true,
+    //         confirmButtonText: "Delete",
+    //         confirmButtonColor: "#d33",
+    //     }).then((result) => {
+    //         /* Read more about isConfirmed, isDenied below */
+    //         if (result.isConfirmed) {
+    //             $.ajaxSetup({
+    //                 headers: {
+    //                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //                 }
+    //             });
+    //             $.ajax({
+    //                 url: url,
+    //                 type: "GET",
+    //                 processData: false,
+    //                 contentType: false,
+    //                 success: function(data) {
+    //                     data = JSON.parse(data);
+    //                     if (data["status"] == "success") {
+    //                         Toast.fire({
+    //                             icon: "success",
+    //                             title: data["message"],
+    //                         }).then((result) => {
+    //                             if (result.dismiss === Swal.DismissReason.timer) {
+    //                                 location.reload();
+    //                             }
+    //                         });
+    //                     } else {
+    //                         Toast.fire({
+    //                             icon: "error",
+    //                             title: data["message"],
+    //                         });
+    //                     }
+    //                 },
+    //                 error: function(reject) {
+    //                     Toast.fire({
+    //                         icon: "error",
+    //                         title: "Something went wrong",
+    //                     });
+    //                 },
+    //             });
+    //         }
+    //     });
+    // }
 
     function parsingDataToModal(id) {
         const Toast = Swal.mixin({

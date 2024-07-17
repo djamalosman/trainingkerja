@@ -298,7 +298,7 @@ $(document).ready(function() {
                                 <div class="row">
                                     <div class="ml-auto d-flex">
                                         <div class="col text-right mb-3">
-                                            <a type="button" style="color:Green" href="/edit-newsupdate/${btoa(value.id)}" title="Edit Course">
+                                            <a type="button" style="color:Green" href="/public/edit-newsupdate/${btoa(value.id)}" title="Edit Course">
                                                 <i class="fa fa-bars"></i>
                                             </a>
                                         </div>
