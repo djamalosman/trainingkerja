@@ -467,9 +467,6 @@ use Illuminate\Support\Facades\Route;
             Route::get('/get-view-store-jobvacancy/{id}', [JobVacancyController::class, 'getViewStoreJobvacancy'])
                 ->name('get-view-store-jobvacancy');
 
-            Route::get('/delete-master-job-cavancy/{id}', [JobVacancyController::class, 'deleteJobVacancyMaster'])
-                ->name('delete-master-job-cavancy');
-
             Route::post('/store-jobvacancy', [JobVacancyController::class, 'storeJobVacancy'])
                 ->name('store-jobvacancy');
 
@@ -480,17 +477,15 @@ use Illuminate\Support\Facades\Route;
             Route::post('/update-job-vacancy', [JobVacancyController::class, 'updateJobVacancy'])
                 ->name('update-job-vacancy');
 
+            Route::get('/stop-data-job/{id}', [JobVacancyController::class, 'stopJobvacancy'])
+                ->name('stop-data-job');
+                
+            Route::get('/delete-master-job-cavancy/{id}', [JobVacancyController::class, 'deleteJobVacancyMaster'])
+                ->name('delete-master-job-cavancy');
+
             Route::get('/delete-master-job-cavancy-detail/{id}', [JobVacancyController::class, 'deleteJobVacancyDetail'])
                 ->name('delete-master-job-cavancy-detail');
 
-
-
-            Route::get('/edit-jobvacancy-detail/{id}', [JobVacancyController::class, 'editJobVacancyDetail'])
-                ->name('edit-jobvacancy-detail');
-
-            Route::put('/update-job-vacancy-detail', [JobVacancyController::class, 'updateJobVacancyDetail'])
-                ->name('update-job-vacancy-detail');
-            
     
 
     // news & update

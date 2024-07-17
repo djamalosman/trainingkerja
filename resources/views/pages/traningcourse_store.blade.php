@@ -261,7 +261,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+                                        <!-- Biaya -->
+                                        <div class="form-group row">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Biaya Pendaftaran">
+                                            <div class="col-md-1"> </div>
+                                            <div class="col-md-5"> 
+                                                <input type="text" class="form-control" id="registrationfee" name="registrationfee">
+                                            </div>
+                                        </div>
                                         <!-- Type -->
                                         
                                         <div class="form-group row">
@@ -319,11 +326,13 @@
                                                 <input type="text" class="form-control" id="link_pendaftaran" placeholder="Link Google Form / Ms Form" name="link_pendaftaran">
                                             </div>
                                         </div>
+                                        <br>
+                                        <br>
                                         <!-- Buttons -->
                                         <div class="form-group row">
-                                            <div class="col-md-6 offset-md-3">
-                                                <button type="button" id="preview-btn" class="btn btn-info">Preview</button>
-                                                <button type="button" id="pending-btn" class="btn btn-warning">Pending</button>
+                                            <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+                                                <button type="button" id="preview-btn" class="btn btn-info">Preview</button>&nbsp;&nbsp;
+                                                <button type="button" id="pending-btn" class="btn btn-warning">Pending</button>&nbsp;&nbsp;
                                                 <button type="button" id="publish-btn" class="btn btn-primary">Publish</button>
                                             </div>
                                         </div>
@@ -412,6 +421,29 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+        // Tambahkan titik jika yang di input sudah menjadi angka ribuan
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix === undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var registrationFeeInput = document.getElementById('registrationfee');
+        
+        registrationFeeInput.addEventListener('keyup', function(e) {
+            // Gunakan fungsi formatRupiah untuk memformat inputan
+            registrationFeeInput.value = formatRupiah(this.value, 'Rp');
+        });
+    });
     function addInput(button) {
         var inputGroup = $(button).closest('.input-group');
         var newInputGroup = inputGroup.clone();
@@ -596,6 +628,7 @@
         $('select[name="jadwal_selesai_tanggal"], select[name="jadwal_selesai_bulan"], select[name="jadwal_selesai_tahun"]').select2();
         $('select[name="category"], select[name="jenis_sertifikasi"]').select2();
         $('select[name="lokasi"]').select2();
+        $('select[name="provinsi"]').select2();
         $('select[name="type"]').select2();
 
         // Populate days
@@ -664,10 +697,10 @@
                     $('#error-message').text('Terjadi kesalahan. Silakan coba lagi');
                     $('#errorModal').modal('show');
 
-                    setTimeout(function() {
-                        $('#errorModal').modal('hide');
-                        location.reload();
-                    }, 2000);
+                    // setTimeout(function() {
+                    //     $('#errorModal').modal('hide');
+                    //     location.reload();
+                    // }, 2000);
                 }
             });
         }

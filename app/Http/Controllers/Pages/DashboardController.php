@@ -13,7 +13,7 @@ use Google\Analytics\Data\V1beta\MetricAggregation;
 use Google\Analytics\Data\V1beta\NumericValue;
 use Google\Analytics\Data\V1beta\OrderBy;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
     public function index(Request $request)
@@ -22,127 +22,69 @@ class DashboardController extends Controller
         $data['title_page'] = 'Dashboard | Dashboard';
         $data['menu'] = MenuModel::all();
 
-        $data['arrDay'] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
-        $data['arrMonthBefore'] = [];
-        $data['arrCurrentMonth'] = [];
-        $data['totalMonthBefore'] = 0;
-        $data['totalCurrentMonth'] = 0;
-        $data['newUsers'] = 0;
-        $data['totalUsers'] = 0;
-        $data['newUsersBefore'] = 0;
-        $data['totalUsersBefore'] = 0;
-        $data['percentageOverTime'] = 0;
+            // $data['trainingTotal'] = 100;
+            // $data['trainingCategory'] = [30, 50, 20];
+            // $data['trainingStatus'] = [25, 25, 25, 25];
+            // $data['jobTotal'] = 50;
+            // $data['jobCategory'] = [20, 20, 10];
+            // $data['jobStatus'] = [10, 20, 10, 10];
 
-        $data['filterMonth'] = $request->month ?? '';
-        $data['filterYear'] = $request->year ?? '';
+            // Query database
+                $trainingCategories = DB::table('dtc_training_course_detail')
+                ->join('m_category_training_course', 'dtc_training_course_detail.id_m_category_training_course', '=', 'm_category_training_course.id')
+                ->select('m_category_training_course.nama as category', DB::raw('count(*) as total'))
+                ->groupBy('m_category_training_course.nama')
+                ->pluck('total', 'category')
+                ->toArray();
 
-        $day = date('d');
-        $dayMonthBefore = date("t", strtotime('-1 month'));
+                $trainingStatuses = DB::table('dtc_training_course_detail')
+                ->select(DB::raw('CASE 
+                WHEN dtc_training_course_detail.status = 1 THEN "Publish"
+                WHEN dtc_training_course_detail.status = 2 THEN "Pending"
+                WHEN dtc_training_course_detail.status = 3 THEN "Non Publish"
+                WHEN dtc_training_course_detail.status = 0 THEN "Kadaluarsa"
+                ELSE "Unknown"
+                END as status')
+                , DB::raw('count(*) as total'))
+                ->groupBy('dtc_training_course_detail.status')
+                ->pluck('total', 'status')
+                ->toArray();
 
+                $jobCategories = DB::table('djv_job_vacancy_detail')
+                ->join('m_employee_status', 'djv_job_vacancy_detail.id_m_employee_status', '=', 'm_employee_status.id')
+                ->select('m_employee_status.nama as category', DB::raw('count(*) as total'))
+                ->groupBy('m_employee_status.nama')
+                ->pluck('total', 'category')
+                ->toArray();
 
-        // if ($request->month == '' && $request->year == '') {
-        //     $data['trafficBefore'] = $this->analytics('oneMonthBefore');
-        //     $data['trafficNow'] = $this->analytics('currentMonth');
+             
 
-        //     if ($data['trafficBefore'] != "error") {
+                $jobStatuses = DB::table('dtc_training_course_detail')
+                ->select(DB::raw('CASE 
+                WHEN dtc_training_course_detail.status = 1 THEN "Publish"
+                WHEN dtc_training_course_detail.status = 2 THEN "Pending"
+                WHEN dtc_training_course_detail.status = 3 THEN "Non Publish"
+                WHEN dtc_training_course_detail.status = 0 THEN "Kadaluarsa"
+                ELSE "Unknown"
+                END as status')
+                , DB::raw('count(*) as total'))
+                ->groupBy('dtc_training_course_detail.status')
+                ->pluck('total', 'status')
+                ->toArray();
 
-        //         foreach ($data['trafficBefore']->getRows() as $row) {
-        //             if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
-        //                 array_push($data['arrMonthBefore'], $row->getMetricValues()[0]->getValue());
-        //                 $data['totalMonthBefore'] += $row->getMetricValues()[0]->getValue();
-        //             } else {
-        //                 array_push($data['arrMonthBefore'], 0);
-        //             }
-        //         }
+                // Convert to arrays for the charts
+                $data['trainingCategory'] = array_values($trainingCategories);
+                $data['trainingCategoryLabels'] = array_keys($trainingCategories);
+                $data['trainingStatus'] = array_values($trainingStatuses);
+                $data['trainingStatusLabels'] = array_keys($trainingStatuses);
+                $data['jobCategory'] = array_values($jobCategories);
+                $data['jobCategoryLabels'] = array_keys($jobCategories);
+                $data['jobStatus'] = array_values($jobStatuses);
+                $data['jobStatusLabels'] = array_keys($jobStatuses);
 
-
-        //         do {
-        //             array_push($data['arrMonthBefore'], 0);
-        //         } while (count($data['arrMonthBefore']) < $dayMonthBefore);
-
-
-
-        //         foreach ($data['trafficNow']->getRows() as $row) {
-        //             // print $row->getDimensionValues()[0]->getValue() . PHP_EOL;
-        //             if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
-        //                 array_push($data['arrCurrentMonth'], $row->getMetricValues()[0]->getValue());
-        //                 $data['totalCurrentMonth'] += $row->getMetricValues()[0]->getValue();
-        //             } else {
-        //                 array_push($data['arrCurrentMonth'], 0);
-        //             }
-        //         }
-
-        //         do {
-        //             array_push($data['arrCurrentMonth'], 0);
-        //         } while (count($data['arrCurrentMonth']) < $day);
-
-        //         $totalsTrafficBefore = $data['trafficBefore']->getTotals();
-        //         // echo count($totalsTrafficBefore) ; die();
-        //         $totalsTrafficNow = $data['trafficNow']->getTotals();
-
-        //         if (isset($totalsTrafficBefore) && !empty($totalsTrafficBefore)) {
-        //             foreach ($totalsTrafficBefore as $row) {
-        //                 if (count($row->getMetricValues()) != 0) {
-        //                     $data['newUsersBefore'] = $row->getMetricValues()[2]->getValue();
-        //                     $data['totalUsersBefore'] = $row->getMetricValues()[1]->getValue();
-        //                 }
-        //             }
-        //         }
-
-        //         // dd($totalsTrafficNow);
-        //         if (isset($totalsTrafficNow) && !empty($totalsTrafficNow)) {
-        //             foreach ($totalsTrafficNow as $row) {
-        //                 // foreach ($row->getMetricValues() as $metricValue) {
-        //                 //     $data['totalCurrentMonth'] = $metricValue->getValue();
-        //                 // }
-        //                 if (count($row->getMetricValues()) != 0) {
-        //                     // $data['totalCurrentMonth'] = $row->getMetricValues()[0]->getValue();
-        //                     $data['newUsers'] = $row->getMetricValues()[2]->getValue();
-        //                     $data['totalUsers'] = $row->getMetricValues()[1]->getValue();
-        //                 }
-        //             }
-        //         }
-
-        //         if ($data['totalMonthBefore'] > 0 && $data['totalCurrentMonth'] > 0) {
-        //             $data['percentageOverTime'] = number_format((float)($data['totalMonthBefore'] - $data['totalCurrentMonth']) / $data['totalMonthBefore'] * 100, 2, '.', '');
-        //         }
-        //     }
-        // } else {
-        //     $data['trafficNow'] = $this->analytics('filter', $request->month, $request->year);
-
-        //     if ($data['trafficNow'] != "error") {
-
-        //         foreach ($data['trafficNow']->getRows() as $row) {
-        //             if (in_array($row->getDimensionValues()[0]->getValue(), $data['arrDay'])) {
-        //                 array_push($data['arrCurrentMonth'], $row->getMetricValues()[0]->getValue());
-        //                 $data['totalCurrentMonth'] += $row->getMetricValues()[0]->getValue();
-        //             } else {
-        //                 array_push($data['arrCurrentMonth'], 0);
-        //             }
-        //         }
-
-        //         do {
-        //             array_push($data['arrCurrentMonth'], 0);
-        //         } while (count($data['arrCurrentMonth']) < $day);
-
-        //         $totalsTrafficNow = $data['trafficNow']->getTotals();
-
-
-        //         // dd($totalsTrafficNow);
-        //         if (isset($totalsTrafficNow) && !empty($totalsTrafficNow)) {
-        //             foreach ($totalsTrafficNow as $row) {
-        //                 if (count($row->getMetricValues()) != 0) {
-        //                     $data['newUsers'] = $row->getMetricValues()[2]->getValue();
-        //                     $data['totalUsers'] = $row->getMetricValues()[1]->getValue();
-        //                 }
-        //             }
-        //         }
-
-        //         if ($data['totalCurrentMonth'] > 0) {
-        //             $data['percentageOverTime'] = 0;
-        //         }
-        //     }
-        // }
+                // Static data
+                $data['trainingTotal'] = array_sum($data['trainingCategory']);
+                $data['jobTotal'] = array_sum($data['jobCategory']);
 
         return view('pages.dashboard', $data);
     }

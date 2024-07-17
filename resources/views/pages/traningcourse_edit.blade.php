@@ -295,6 +295,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                         <!-- Biaya -->
+                                         <div class="form-group row">
+                                            <input type="text"class="col-md-2 form-control" readonly value="Biaya Pendaftaran">
+                                            <div class="col-md-1"> </div>
+                                            <div class="col-md-5"> 
+                                                <input type="text" class="form-control" id="registrationfee" value="{{ $databyid->registrationfee }}" name="registrationfee">
+                                            </div>
+                                        </div>
                                         @if (Count($listmateri) > 0)
                                             @foreach ($listfasilitas as $index => $datfasilitas)
                                                 <div class="form-group row">
@@ -500,7 +508,44 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+    function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
+            // Tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix === undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+    }
+
+    function cleanRupiahFormat(rupiah) {
+            return rupiah.replace(/[^,\d]/g, '');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var registrationFeeInput = document.getElementById('registrationfee');
+        // Format nilai awal jika ada
+        if (registrationFeeInput.value) {
+            registrationFeeInput.value = formatRupiah(registrationFeeInput.value, 'Rp');
+        }
+        registrationFeeInput.addEventListener('keyup', function(e) {
+            // Gunakan fungsi formatRupiah untuk memformat inputan
+            var cleanedValue = cleanRupiahFormat(this.value);
+            registrationFeeInput.value = formatRupiah(cleanedValue, 'Rp');
+        });
+        var form = document.getElementById('form');
+        form.addEventListener('submit', function(e) {
+            // Bersihkan format Rupiah sebelum submit form
+            var cleanedValue = cleanRupiahFormat(registrationFeeInput.value);
+            registrationFeeInput.value = cleanedValue;
+        });
+    });
     function previewPhoto(button) {
         var index = $(button).data('index');
         var photoInput = document.getElementById('photoDb' + index);
@@ -898,7 +943,7 @@
                 $('select[name="jadwal_selesai_bulan"]').append($('<option>', {
                     value: index + 1,
                     text: month,
-                    selected: (index + 1 == parseInt(bulan)) // Set opsi terpilih jika nilai sesuai
+                    selected: (index + 1 == parseInt(bulanEndate)) // Set opsi terpilih jika nilai sesuai
                 }));
             });
 

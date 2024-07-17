@@ -57,7 +57,6 @@ class TrainingCourseController extends Controller
     }
     
 
-
     public function traningCourse($id)
     {
         $data['menus'] = MenuModel::find(base64_decode($id));
@@ -88,12 +87,6 @@ class TrainingCourseController extends Controller
             'm_type_training_course.nama as typeonlineofline'
         ) ->distinct() ->get();
 
-       // Mendapatkan semua tipe pelatihan yang unik
-        // $filters['typeonlineofline'] = M_type_TrainingCourseModel::select('nama')->distinct()->get();
-        // $filters['category'] = M_Category_TrainingCourseModel::select('nama')->distinct()->get();
-        // $filters['cetificate_type'] = M_Jenis_Sertifikasi_TrainingCourseModel::select('nama')->distinct()->get();
-        // $filters['traning_name'] = TraningCourseDetailsModel::select('traning_name')->distinct()->get();
-        // $filters['status'] = TraningCourseDetailsModel::select('status')->distinct()->get();
 
         return response()->json($filters);
     }
@@ -126,6 +119,9 @@ class TrainingCourseController extends Controller
             }
             elseif ( $request->status_training  == 'Pending') {
                 $query->where('dtc_training_course_detail.status',2);
+            }
+            elseif ( $request->status_training  == 'Non Publish') {
+                $query->where('dtc_training_course_detail.status',3);
             }
             elseif ($request->status_training  =='Kadaluarsa') {
                 $query->where('dtc_training_course_detail.status',0);
@@ -183,6 +179,7 @@ class TrainingCourseController extends Controller
             )->toDateString();
 
             $idProvinsi = $req->provinsi === 'Pilih Provinsi' ? 0 : $req->provinsi;
+            $type = $req->type === 'Pilih Type' ? 0 : $req->type;
 
             $listItem = new TraningCourseDetailsModel();
             $listItem->traning_name                 = $req->nama_training;
@@ -191,7 +188,8 @@ class TrainingCourseController extends Controller
             $listItem->training_duration            = $req->training_duration;
             $listItem->startdate                    = $jadwalMulai;
             $listItem->enddate                      = $jadwalSelesai;
-            $listItem->typeonlineoffile             = $req->type;
+            $listItem->typeonlineoffile             = $type;
+            $listItem->registrationfee              = $req->registrationfee;
             $listItem->id_provinsi                  = $idProvinsi;
             $listItem->lokasi                       = $req->lokasi;
             $listItem->link_pendaftaran             = $req->link_pendaftaran;
@@ -368,6 +366,7 @@ class TrainingCourseController extends Controller
             $listItem->training_duration            = $req->training_duration;
             $listItem->startdate                    = $jadwalMulai;
             $listItem->enddate                      = $jadwalSelesai;
+            $listItem->registrationfee              = $req->registrationfee;
             $listItem->typeonlineoffile             = $req->type;
             $listItem->id_provinsi                  = $idProvinsi;
             $listItem->lokasi                       = $req->lokasi;
@@ -597,7 +596,6 @@ class TrainingCourseController extends Controller
             $listItem->status                       = 3;
             $listItem->insert_by                    = session()->get('id');
             $listItem->updated_by                   = session()->get('id');
-            $listItem->updated_by_ip                = $req->ip();
             $listItem->save();
         $response = [
             'status' => 'success',

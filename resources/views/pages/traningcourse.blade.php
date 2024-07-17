@@ -426,6 +426,7 @@ $(document).ready(function() {
         }
         $(this).next(".custom-file-label").html(files.join(", "));
     });
+
     function saveSelectedValue() {
         var selectElement = document.getElementById('sideLists');
         var selectedValue = selectElement.options[selectElement.selectedIndex].value;
@@ -528,5 +529,6 @@ $(document).ready(function() {
             }
         });
     }
+    
 </script>
 @endsection

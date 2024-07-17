@@ -1,5 +1,5 @@
 <footer class="main-footer">
-  <strong>Copyright &copy; 2022 PT EDI Indonesia.</strong>
+  <strong>Copyright &copy; TrainingKerja.com</strong>
 </footer>
 
 <aside class="control-sidebar control-sidebar-dark">

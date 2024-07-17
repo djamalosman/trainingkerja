@@ -215,18 +215,11 @@
         
     </section>
 
-    <section class="content p-4 col-md-8" >
+    <section class="content p-4 col-md-12" >
         <div class="card card-default">
             <div class="card-header bg-red">
-                <h3 class="card-title"><b><h4>Status Data<?php
-                    if ($databyid->status ==1) {
-                      echo "Publish</b></h4>";
-                    } else {
-                       echo" Pending</b></h4>";
-                    }
-                    
-                    
-                    ?></h3>
+                <h3 class="card-title">Edit News & Update</h3>
+
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -245,29 +238,36 @@
             
                     <div class="row">
                         <!-- Left Card -->
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="titleEn">Jenis Berita</label>
-                                        <select class="form-control" name="category" id="category" onclick="saveSelectedValue()">
-                                            <option value="">Pilih</option>
-                                            @foreach($liscategory as $value)
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Jenis Berita">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <select class="form-control" name="category" id="category"  >
+                                                <option value="">Pilih</option>
+                                                @foreach($liscategory as $value)
                                                 <option value="{{ $value->id }}" {{ $databyid->id_m_news == $value->id ? 'selected' : '' }}>
                                                     {{ $value->nama }}
                                                 </option>
-                                            @endforeach
-                                        </select>
+                                                 @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Nama Berita</label>
-                                        <input type="text" name="title" class="form-control" value="{{$databyid->title}}" id="title" placeholder="">
-                                        <small id="title_eng_error" class="title_eng_error input-group text-sm mt-2 text-danger error"></small>
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Nama Berita">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" name="title" value="{{$databyid->title}}" class="form-control" id="title" placeholder="">
+                                        </div>
                                     </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="titleEn">Tanggal Publikasi</label>
-                                        <input type="text" name="startdate" class="form-control" value="{{$implementation_date}}" id="startdate" placeholder="">
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Tanggal Publikasi">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" name="startdate" value="{{$implementation_date}}"  class="form-control" id="startdate" placeholder="">
+                                        </div>
                                     </div>
                                     
                                     
@@ -275,27 +275,36 @@
                             </div>
                         </div>
                         <!-- Right Card -->
-                        <div class="col-md-6">
+                         <!-- Right Card -->
+                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
                                     
-                                    <div class="form-group">
-                                        <label for="picture">Photo</label>
+                                    <div class="form-group row">
                                         <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" name="item_file[]"  accept="image/*" multiple class="custom-file-input" id="item_files">
-                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                            <div class="custom-file ">
+                                                <input type="text" class="col-md-2 form-control" readonly value="Photo">
+                                                <div class="col-md-1"> </div>
+                                                <div class="col-md-8">
+                                                    <input type="file" name="item_file[]"  accept="image/*" multiple class="custom-file-input" id="item_files">
+                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    @if (Count($getImage) > 0)
+                                                        <button type="button" class="btn btn-primary start" data-toggle="modal" data-target="#filterButtonImage">view Image</button>
+                                                     @endif
+                                                </div>
+                                               
                                             </div>
                                         </div>
-                                        <br>
-                                        @if (Count($getImage) > 0)
-                                            <button type="button" class="btn btn-primary start" data-toggle="modal" data-target="#filterButtonImage">view Image</button>
-                                        @endif
                                     </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Persyaratan</label>
-                                        <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50">{{$databyid->description}}</textarea>
-                                       
+                                    
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Isi Berita">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50">{{$databyid->description}}</textarea>
+                                        </div>
                                     </div>
                                     
                                 </div>
@@ -304,16 +313,21 @@
 
                     </div>
             
-                    <div class="d-flex justify-content-center">
-                        <button type="button" id="preview-btn" class="btn btn-primary start">Preview</button> &nbsp;&nbsp;
-                        <button type="button" id="pending-btn" class="btn btn-primary start">Pending</button> &nbsp;&nbsp;
-                        <button type="button" id="publish-btn" class="btn btn-primary start">Publish</button>
+                    <br>
+                    <br>
+                    <!-- Buttons -->
+                    <div class="form-group row">
+                        <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+                            <button type="button" id="preview-btn" class="btn btn-info">Preview</button>&nbsp;&nbsp;
+                            <button type="button" id="pending-btn" class="btn btn-warning">Pending</button>&nbsp;&nbsp;
+                            <button type="button" id="publish-btn" class="btn btn-primary">Publish</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
-         <!-- Modal -->
-         <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+       <!-- Modal -->
+        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -343,14 +357,14 @@
               <div class="modal-content">
                 <div class="modal-body">
                   <i class="fas fa-check-circle check-icon"></i>
-                  
-                  <p>Data berhasil diupdate</p>
+                  <h4 class="mt-4">Oh Yeah!</h4>
+                  <p>Data berhasil disimpan</p>
                 </div>
                
               </div>
             </div>
-        </div>
-          <!-- Failed Modal -->
+          </div>
+           <!-- Failed Modal -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
@@ -368,8 +382,7 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        
-        
+
         <!-- Modal untuk menampilkan gambar -->
         <div class="modal fade" id="filterButtonImage" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -391,7 +404,6 @@
                 </div>
             </div>
         </div>
-        
 
     </section>
 </div>
@@ -408,13 +420,6 @@
 
 <script>
 
-$(document).ready(function() {
-        $('.img-thumbnail').click(function() {
-            var imgSrc = $(this).data('src');
-            $('#filterButtonImage .modal-body img').attr('src', imgSrc);
-            $('#filterButtonImage').modal('show');
-        });
-    });
 $(document).ready(function() {
         // Function to show loading indicator
         function showLoading() {
@@ -580,7 +585,7 @@ $(document).ready(function() {
 
                     setTimeout(function() {
                         $('#errorModal').modal('hide');
-                        location.reload();
+                        //location.reload();
                     }, 2000);
                 }
             });

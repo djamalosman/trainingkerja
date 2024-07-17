@@ -70,7 +70,7 @@ return [
 
         'windows_uploads' => [
             'driver' => 'local',
-            'root'   => 'C:/inetpub/wwwroot/ikip/storage/app/public/',
+            'root'   => 'E:/laragon/www/frontend/storage/app/public/',
             'visibility' => 'public',
         ],
 

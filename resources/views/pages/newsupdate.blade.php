@@ -66,20 +66,17 @@
                                     <h3 class="card-title">Side List {{explode('|',$title_page)[1]}}</h3>
                                 </div>
                                 <div class="card-body">
+                                    
                                     <div class="row">
                                         <div class="col-0">
                                             
-                                            <a type="button" href="{{ route('get-view-store-news',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                                            </svg> Add</a>
-                                      </div>
-                                      <div class="col-1">
+                                              <a type="button" href="{{ route('get-view-store-news',  ['id' => base64_encode($menus->id)])}}" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                              </a>
+                                        </div>
+                                        <div class="col-1">
                                             
-                                        <button id="filterButton" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-                                            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
-                                          </svg>  Filter</button>
-                                        
-                                     </div>
+                                            <a type="button" id="filterButton" class="btn btn-primary"><i class="fa fa-filter" aria-hidden="true"></i></a>
+                                        </div>
                                     </div>
                                     <br>
                                     <div class="table-responsive">
@@ -90,6 +87,7 @@
                                                     <th>Nama Berita</th>
                                                     <th>Category</th>
                                                     <th>Tanggal</th> 
+                                                    <th>Status</th> 
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -284,18 +282,36 @@ $(document).ready(function() {
                 table.clear().draw();
 
                 $.each(data, function(key, value) {
-                    var statusBadge = value.status == '1' 
-                    ? '<span class="badge badge-primary">Publish</span>'
-                    : '<span class="badge badge-warning">Pending</span>';
+                    var statusBadge = 
+                            value.status == '1' ? '<span class="badge badge-primary">Publish</span>' :
+                            value.status == '2' ? '<span class="badge badge-warning">Pending</span>' :
+                            value.status == '3' ? '<span class="badge badge-secondary">Non Publish</span>' :
+                            value.status == '0' ? '<span class="badge badge-danger">Kadaluarsa</span>' : '';
                     table.row.add([
                         key + 1,
                             value.title,
                             value.category,
                             formatDate(value.implementation_date),
+                            statusBadge,
+                            `
+                            <div class="container mt-0">
+                                <div class="row">
+                                    <div class="ml-auto d-flex">
+                                        <div class="col text-right mb-3">
+                                            <a type="button" style="color:Green" href="/edit-newsupdate/${btoa(value.id)}" title="Edit Course">
+                                                <i class="fa fa-bars"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col text-right mb-3">
+                                            <a type="button" href="#" style="color:red" onclick="stopPrompt('${value.id}')" title="Stop Course">
+                                                <i class="fa fa-stop"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        //statusBadge,
-                        '<div class="container mt-12"> <div class="row button-container"><div class="col-6 text-left"><a type="button" href="/edit-newsupdate/' + btoa(value.id) + '" class="btn btn-warning"><i class="fa fa-bars"></i></a></div>' +
-                        '<div class="col-6 text-left"><button type="button" onclick="deletePrompt(\'' + value.id + '\')" class="btn btn-danger"><i class="fa fa-trash"></i></button></div></div> </div>'
+                            `
                     ]).draw(false);
                 });
             },

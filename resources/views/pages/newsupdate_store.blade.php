@@ -215,7 +215,7 @@
         
     </section>
 
-    <section class="content p-4 col-md-8" >
+    <section class="content p-4 col-md-12" >
         <div class="card card-default">
             <div class="card-header bg-red">
                 <h3 class="card-title">Create News & Update</h3>
@@ -238,27 +238,34 @@
             
                     <div class="row">
                         <!-- Left Card -->
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="titleEn">Jenis Berita</label>
-                                        <select class="form-control" name="category" id="category" onclick="saveSelectedValue()">
-                                            <option value="">Pilih</option>
-                                            @foreach($liscategory as $value)
-                                                <option value="{{$value->id}}">{{$value->nama}}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Jenis Berita">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <select class="form-control" name="category" id="category" onclick="saveSelectedValue()">
+                                                <option value="">Pilih</option>
+                                                @foreach($liscategory as $value)
+                                                    <option value="{{$value->id}}">{{$value->nama}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Nama Berita</label>
-                                        <input type="text" name="title" class="form-control" id="title" placeholder="">
-                                        <small id="title_eng_error" class="title_eng_error input-group text-sm mt-2 text-danger error"></small>
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Nama Berita">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" name="title" class="form-control" id="title" placeholder="">
+                                        </div>
                                     </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="titleEn">Tanggal Publikasi</label>
-                                        <input type="text" name="startdate" class="form-control" id="startdate" placeholder="">
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Tanggal Publikasi">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" name="startdate" class="form-control" id="startdate" placeholder="">
+                                        </div>
                                     </div>
                                     
                                     
@@ -266,23 +273,29 @@
                             </div>
                         </div>
                         <!-- Right Card -->
-                        <div class="col-md-6">
+                         <!-- Right Card -->
+                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
                                     
-                                    <div class="form-group">
-                                        <label for="picture">Photo</label>
+                                    <div class="form-group row">
                                         <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" name="item_file[]"  accept="image/*" multiple class="custom-file-input" id="item_files">
-                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                            <div class="custom-file ">
+                                                <input type="text" class="col-md-2 form-control" readonly value="Photo">
+                                                <div class="col-md-1"> </div>
+                                                <div class="col-md-9">
+                                                    <input type="file" name="item_file[]"  accept="image/*" multiple class="custom-file-input" id="item_files">
+                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="titleEn">Persyaratan</label>
-                                        <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50"></textarea>
-                                       
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Isi Berita">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <textarea class="form-control desc" name="requirements" id="requirements" rows="4" cols="50"></textarea>
+                                        </div>
                                     </div>
                                     
                                 </div>
@@ -291,10 +304,15 @@
 
                     </div>
             
-                    <div class="d-flex justify-content-center">
-                        <button type="button" id="preview-btn" class="btn btn-primary start">Preview</button> &nbsp;&nbsp;
-                        <button type="button" id="pending-btn" class="btn btn-primary start">Pending</button> &nbsp;&nbsp;
-                        <button type="button" id="publish-btn" class="btn btn-primary start">Publish</button>
+                    <br>
+                    <br>
+                    <!-- Buttons -->
+                    <div class="form-group row">
+                        <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+                            <button type="button" id="preview-btn" class="btn btn-info">Preview</button>&nbsp;&nbsp;
+                            <button type="button" id="pending-btn" class="btn btn-warning">Pending</button>&nbsp;&nbsp;
+                            <button type="button" id="publish-btn" class="btn btn-primary">Publish</button>
+                        </div>
                     </div>
                 </form>
             </div>

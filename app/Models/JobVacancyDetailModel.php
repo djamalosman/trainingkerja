@@ -9,11 +9,30 @@ class JobVacancyDetailModel extends Model
 {
     use HasFactory;
     //table name
-    protected $table = 'job_vacancy_detail';
+    protected $table = 'djv_job_vacancy_detail';
 
     protected $primaryKey = 'id';
     //set auto incrementing for PK
     public $incrementing = true;
 
-    protected $fillable = ['id_job_m_vacancy', 'vacancy_name','location','status_vacancy','posted_date','close_date','vacancy_level','vacancy_description','vacancy_description_en','file','insert_by', 'updated_by','updated_by_ip','salary','status'];
+    protected $fillable = [
+        'id_m_employee_status',
+        'id_m_work_location',
+        'id_m_salaray_date_mont',
+        'id_m_salaray',
+        'id_m_sector',
+        'id_m_education',
+        'id_m_experience_level',
+        'job_title',
+        'sertifikasi',
+        'generatenumber',
+        'job_description',
+        'skill_requirment',
+        'posted_date',
+        'close_date',
+        'insert_by',
+        'updated_by',
+        'updated_by_ip',
+        'status'
+    ];
 }
