@@ -662,41 +662,41 @@ $(document).ready(function() {
     //     });
     // }
 
-    function parsingDataToModal(id) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-        });
+    // function parsingDataToModal(id) {
+    //     const Toast = Swal.mixin({
+    //         toast: true,
+    //         position: "top-end",
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //         timerProgressBar: true,
+    //     });
 
-        var url = "{{ route('/public/edit-traningcourse-detail',':id') }}";
-        url = url.replace(":id", id);
-        $.ajax({
-            url: url,
-            type: "GET",
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                data = JSON.parse(data);
-                if (data["status"] == "success") {
-                    $("#edit-data-list-item").html(data["output"]);
-                    $("#edit-item").modal("toggle");
-                } else {
-                    Toast.fire({
-                        icon: "error",
-                        title: data["message"],
-                    });
-                }
-            },
-            error: function(reject) {
-                Toast.fire({
-                    icon: "error",
-                    title: "Something went wrong",
-                });
-            },
-        });
-    }
+    //     var url = "{{ route('edit-traningcourse-detail',':id') }}";
+    //     url = url.replace(":id", id);
+    //     $.ajax({
+    //         url: url,
+    //         type: "GET",
+    //         processData: false,
+    //         contentType: false,
+    //         success: function(data) {
+    //             data = JSON.parse(data);
+    //             if (data["status"] == "success") {
+    //                 $("#edit-data-list-item").html(data["output"]);
+    //                 $("#edit-item").modal("toggle");
+    //             } else {
+    //                 Toast.fire({
+    //                     icon: "error",
+    //                     title: data["message"],
+    //                 });
+    //             }
+    //         },
+    //         error: function(reject) {
+    //             Toast.fire({
+    //                 icon: "error",
+    //                 title: "Something went wrong",
+    //             });
+    //         },
+    //     });
+    // }
 </script>
 @endsection
