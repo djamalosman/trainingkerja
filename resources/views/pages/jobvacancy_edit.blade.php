@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 
 <style>
- 
+
  #inputText {
         width: 100%;
         height: 40px;
@@ -15,7 +15,7 @@
         margin-bottom: 1em;
         font-size: 1em;
     }
-    
+
     .badge {
         display: inline-flex;
         align-items: center;
@@ -28,13 +28,13 @@
         line-height: 1.5; /* Menyesuaikan tinggi baris */
         height: 2.5em; /* Menyesuaikan tinggi badge */
     }
-    
+
     .badge .close {
         margin-left: 0.5em;
         cursor: pointer;
         font-weight: bold;
     }
-    
+
 
     #inputTextLevel {
         width: 100%;
@@ -43,7 +43,7 @@
         margin-bottom: 1em;
         font-size: 1em;
     }
-    
+
     .badgeLevel {
         display: inline-flex;
         align-items: center;
@@ -56,7 +56,7 @@
         line-height: 1.5; /* Menyesuaikan tinggi baris */
         height: 2.5em; /* Menyesuaikan tinggi badge */
     }
-    
+
     .badgeLevel .close {
         margin-left: 0.5em;
         cursor: pointer;
@@ -71,7 +71,7 @@
         margin-bottom: 1em;
         font-size: 1em;
     }
-    
+
     .badgeEdit {
         display: inline-flex;
         align-items: center;
@@ -84,7 +84,7 @@
         line-height: 1.5; /* Menyesuaikan tinggi baris */
         height: 2.5em; /* Menyesuaikan tinggi badge */
     }
-    
+
     .badgeEdit .close {
         margin-left: 0.5em;
         cursor: pointer;
@@ -98,7 +98,7 @@
         margin-bottom: 1em;
         font-size: 1em;
     }
-    
+
     .badgeLevelEdit {
         display: inline-flex;
         align-items: center;
@@ -111,7 +111,7 @@
         line-height: 1.5; /* Menyesuaikan tinggi baris */
         height: 2.5em; /* Menyesuaikan tinggi badge */
     }
-    
+
     .badgeLevelEdit .close {
         margin-left: 0.5em;
         cursor: pointer;
@@ -213,7 +213,7 @@
                 </div>
             </div>
         </div>
-        
+
     </section>
 
     <section class="content p-4 col-md-12" >
@@ -231,7 +231,7 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            
+
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -239,6 +239,24 @@
                             <input type="hidden" name="iddtl" value="{{ $iddtl }}">
                             <div class="card">
                                 <div class="card-body">
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Company Name">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" value="{{ $databyid->companyName}}" id="companyName" name="companyName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Company Logo">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="file" class="form-control photo" id="photo" name="photo">
+                                            <br>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#previewModalPhoto">
+                                                View file
+                                            </button>
+                                        </div>
+                                    </div>
                                     <div class="form-group row">
                                         <input type="text" class="col-md-2 form-control" readonly value="Jobs Title">
                                         <div class="col-md-1"> </div>
@@ -250,38 +268,37 @@
                                         <input type="text" class="col-md-2 form-control" readonly value="Employment Status">
                                         <div class="col-md-1"> </div>
                                         <div class="col-md-9">
-                                           
-                                            <select class="form-control" name="employmentStatus" id="employmentStatus"">
+
+                                            <select class="form-control" name="employmentStatus" id="employmentStatus">
                                                 <option>--Pilih Employee status--</option>
                                                 @foreach($listemployeestatus as $value)
-                                                <option value="{{ $value->id }}" {{ $databyid->id_m_employee_status == $value->id ? 'selected' : '' }}>
-                                                    {{ $value->nama }}
+                                                <option value="{{ $value->id }}" {{ $databyid->id_m_employee_status == $value->id ? 'selected' : '' }}> {{ $value->nama }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <input type="text" class="col-md-2 form-control" readonly value="Work Location">
+                                        <input type="text" class="col-md-2 form-control" readonly value="Placement">
                                         <div class="col-md-1"> </div>
                                         <div class="col-md-9">
                                             <select class="form-control" id="workLocation" name="workLocation">
                                                 <option>--Pilih Work Location--</option>
                                                 @foreach($listworklocation as $value)
                                                 <option value="{{ $value->id }}" {{ $databyid->id_m_work_location == $value->id ? 'selected' : '' }}>
-                                                    {{ $value->nama }}
+                                                    {{ $value->nama }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    
-                                   
+
+
                                     <div class="form-group row">
                                         <input type="text" class="col-md-2 form-control" readonly value="Est. Salary">
                                         <div class="col-md-1"> </div>
                                         <div class="col-md-4">
                                             <select class="form-control" id="estSalary" name="estSalary">
                                                 <option>--Pilih Salaray--</option>
-                                                
+
                                                 @foreach($listsalary as $value)
                                                     <option value="{{ $value->id }}" {{ $databyid->id_m_salaray == $value->id ? 'selected' : '' }}>
                                                     {{ $value->nama }}
@@ -291,7 +308,7 @@
                                         <div class="col-md-4">
                                             <select class="form-control" id="salaryDateMonth" name="salaryDateMonth">
                                                 <option>--Pilih Fee--</option>
-                                                
+
                                                 @foreach($listfee as $value)
                                                     <option value="{{ $value->id }}" {{ $databyid->id_m_salaray_date_mont == $value->id ? 'selected' : '' }}>
                                                     {{ $value->nama }}
@@ -305,7 +322,7 @@
                                         <div class="col-md-9">
                                             <select class="form-control" id="sector" name="sector">
                                                 <option>--Pilih Sector--</option>
-                                              
+
                                                 @foreach($listsector as $value)
                                                     <option value="{{ $value->id }}" {{ $databyid->id_m_sector == $value->id ? 'selected' : '' }}>
                                                     {{ $value->nama }}
@@ -313,12 +330,42 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <!-- Provinsi -->
                                     <div class="form-group row">
-                                        <div class="form-section-title col-md-2" style="color: #007bff"><h4><b>Requirtment</h4></b></div>
+                                        <input type="text"class="col-md-2 form-control" readonly value="Provinsi">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <select class="form-control" id="provinsi" name="provinsi">
+                                                <option>Pilih Provinsi</option>
+                                                @foreach($listprovinsi as $value)
+                                                    <option value="{{ $value->id }}" {{ $databyid->id_provinsi == $value->id ? 'selected' : '' }}> {{ $value->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    
-                                    
-                                    
+                                    <!-- Lokasi -->
+                                    <div class="form-group row">
+                                        <input type="text"class="col-md-2 form-control" readonly value="City">
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" value="{{$databyid->lokasi}}" id="lokasi" name="lokasi">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <input type="text"class="col-md-2 form-control" value="Link Pendaftaran" readonly >
+                                        <div class="col-md-1"> </div>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" id="link_pendaftaran" placeholder=""  value="{{$databyid->linkpendaftaran}}"  name="link_pendaftaran">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="form-section-title col-md-2" style="color: #007bff"><h4><b>Requirtment</b></h4></div>
+                                    </div>
+
+
+
                                     <div class="form-group row">
                                         <input type="text" class="col-md-2 form-control" readonly value="Education">
                                         <div class="col-md-1"> </div>
@@ -346,7 +393,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        
+
                                         <input type="text" class="col-md-2 form-control" readonly value="Certification">
                                         <div class="col-md-1"> </div>
                                         <div class="col-md-9">
@@ -368,7 +415,7 @@
                                            </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="form-section-title col-md-2" style="color: #007bff"><h4><b>Schedule</h4></b></div>
+                                        <div class="form-section-title col-md-2" style="color: #007bff"><h4><b>Schedule</b></h4></div>
                                     </div>
                                     <div class="form-group row">
                                         <input type="text"class="col-md-2 form-control"  readonly value="Publish Date">
@@ -430,7 +477,27 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal photo -->
+        <div class="modal fade" id="previewModalPhoto" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="previewModalLabel">Photo Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-contentPhoto">
+                        <img src="http://127.0.0.1:8000/storage/{{ $databyid->file}}" alt="Preview Image" class="img-thumbnail" width="250px">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -447,9 +514,9 @@
                     </div>
                     <div class="modal-body"  id="modal-content">
                         <!-- Content will be inserted here -->
-                        
+
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -474,7 +541,7 @@
                     <br>
                     <p id="error-message"></p>
                 </div>
-               
+
               </div>
             </div>
           </div>
@@ -499,9 +566,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script>
+    // Event listener for dynamically added elements (if any)
 
 
-    
     function formatDate(dateStr) {
         if (!dateStr) return '';
 
@@ -550,7 +617,7 @@
                 return text.replace(/<\/?[^>]+>/gi, '');
             }
 
-         
+
             var formData = {
                 jobTitle: $('#jobTitle').val(),
                 employmentStatus: $('#employmentStatus').val(),
@@ -558,6 +625,10 @@
                 salaryDateMonth: $('#salaryDateMonth').val(),
                 estSalary: $('#estSalary').val(),
                 sector: formatDate($('#sector').val()),
+                companyName: $('#companyName').val(),
+                provinsi: $('#provinsi').val(),
+                lokasi: $('#lokasi').val(),
+                link_pendaftaran: $('#link_pendaftaran').val(),
                 education: formatDate($('#education').val()),
                 experienceLevel: $('#experienceLevel').val(),
                 certification: $('#certification').val(),
@@ -569,6 +640,10 @@
             };
 
             $('#modal-content').html(`
+                <div class="form-group row">
+                <label>Company Name</label>
+                <input type="text" class="form-control" value="${formData.companyName}" readonly>
+                </div>
                 <div class="form-group row">
                 <label>Job Title</label>
                     <input type="text" class="form-control" value="${formData.jobTitle}" readonly>
@@ -608,7 +683,20 @@
                     <option value="${formData.estSalary}" selected>${$('#sector option:selected').text()}</option>
                 </select>
                 </div>
-
+                 <div class="form-group row">
+                    <label>Provinsi</label>
+                     <select class="form-control" readonly>
+                         <option value="${formData.provinsi}" selected>${$('#provinsi option:selected').text()}</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label>City</label>
+                    <input type="text" class="form-control" value="${formData.lokasi}" readonly>
+                </div>
+                <div class="form-group row">
+                    <label>Link Pendaftaran</label>
+                    <input type="text" class="form-control" value="${formData.link_pendaftaran}" readonly>
+                </div>
                 <div class="form-group row">
                 <label>Education</label>
                 <select class="form-control" readonly>
@@ -648,9 +736,43 @@
                     <input type="text" class="form-control" value="${formData.jadwal_selesai_tanggal}" readonly>
                 </div>
             `);
+
+            var fileInput = document.querySelectorAll('.photo');
+            if (fileInput.length > 0) {
+                var imageUrls = [];
+                var filesLoaded = 0;
+
+                fileInput.forEach(function(input) {
+                    var files = input.files;
+                    if (files.length > 0) {
+                        for (var i = 0; i < files.length; i++) {
+                            (function(file) {
+                                var reader = new FileReader();
+                                reader.onload = function(e) {
+                                    imageUrls.push(e.target.result);
+                                    filesLoaded++;
+                                    if (filesLoaded === fileInput.length) {
+                                        var imagesHtml = imageUrls.map((url, index) => `
+                                        <div class="form-group row" style=" text-align: left;">
+                                            <label for="picture">Photo ${index + 1}</label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <img src="${url}" alt="Preview Image ${index + 1}" class="img-thumbnail" width="250px">
+                                        </div>
+                                    `).join('');
+                                        $('#modal-content').append(imagesHtml);
+                                    }
+                                };
+                                reader.readAsDataURL(file);
+                            })(files[i]);
+                        }
+                    }
+                });
+            }
+
             $('#previewModal').modal('show');
 
-            
+
         });
         $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_mulai_bulan"], select[name="jadwal_mulai_tahun"]').select2();
         $('select[name="jadwal_selesai_tanggal"], select[name="jadwal_selesai_bulan"], select[name="jadwal_selesai_tahun"]').select2();
@@ -662,7 +784,8 @@
         $('select[name="sector"]').select2();
         $('select[name="education"]').select2();
         $('select[name="experienceLevel"]').select2();
-      
+        $('select[name="provinsi"]').select2();
+
         // Populate days
         for (let i = 1; i <= 31; i++) {
             $('select[name="jadwal_mulai_tanggal"], select[name="jadwal_selesai_tanggal"]').append(`<option value="${i}">${i}</option>`);
@@ -706,7 +829,7 @@
             showLoading(); // Show loading indicator
 
             $.ajax({
-                url: '/public/update-job-vacancy',
+                url: '/update-job-vacancy',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -754,7 +877,26 @@
         startDate: new Date(),
     });
     $(".desc").summernote({
-        height: 75,
+        toolbar: [
+            ['font', ['clear']], // Tombol font tidak ditampilkan
+            ['color', ['color']], // Tombol warna tidak ditampilkan
+            ['para', ['ul', 'ol', 'paragraph']],
+
+        ],
+        buttons: {
+            // Menambahkan tombol custom recent color jika diperlukan
+            recentColor: function() {
+                return $.summernote.ui.button({
+                    contents: '<i class="note-icon-note"></i> Recent Color',
+                    tooltip: 'Recent Color',
+                    click: function() {
+                        // Fungsi untuk recent color
+                    }
+                }).render();
+            }
+        },
+        // Menyembunyikan toolbar default
+        disableDragAndDrop: true
     });
     $('input[type="file"]').change(function(e) {
         console.log('Picture Changed');
@@ -772,7 +914,7 @@
     $(document).ready(function() {
             // Data tanggal
             var tanggalStartDate = '{{ $posted_date }}';
-            
+
             // Pecah data tanggal menjadi tahun, bulan, dan hari
             var tanggalParts = tanggalStartDate.split("-");
             var tahun = tanggalParts[0];
@@ -792,7 +934,7 @@
             }
             const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
-          
+
             months.forEach((month, index) => {
                 $('select[name="jadwal_mulai_bulan"]').append($('<option>', {
                     value: index + 1,
@@ -813,7 +955,7 @@
             var tanggalEndDate = '{{ $close_date }}';
 
             console.log(tanggalEndDate)
-            
+
             // Pecah data tanggal menjadi tahun, bulan, dan hari
             var tanggalPartsEndate = tanggalEndDate.split("-");
             var tahunEndate = tanggalPartsEndate[0];

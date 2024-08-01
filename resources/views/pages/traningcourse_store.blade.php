@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 <style>
-  
+
   .form-group {
             margin-bottom: 15px;
         }
@@ -20,7 +20,7 @@
         .btn-add {
             margin-top: 0;
         }
-        
+
   .loading-overlay {
     position: fixed;
     top: 0;
@@ -95,7 +95,7 @@
                 </div>
             </div>
         </div>
-        
+
     </section>
 
     <section class="content p-4 col-md-12" >
@@ -113,9 +113,9 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            
+
             <div class="card-body">
-              
+
                     <input type="hidden" name="id_content" value="{{ base64_encode($content) }}">
                     <div class="row">
                         <div class="col-md-12">
@@ -126,7 +126,7 @@
                                         <div class="form-group row">
                                             <input type="text"class="col-md-2 form-control" readonly value="Nama Training">
                                             <div class="col-md-1"> </div>
-                                            <div class="col-md-9">  
+                                            <div class="col-md-9">
                                                 <input type="text" class="form-control" id="nama_training" name="nama_training">
                                             </div>
                                         </div>
@@ -161,7 +161,7 @@
                                             <input type="text"class="col-md-2 form-control" readonly value="Durasi Training">
                                             <div class="col-md-1"> </div>
                                             <div class="col-md-5">
-                                                
+
                                                 <div class="input-group-append">
                                                     <input type="number" class="form-control" id="training_duration" name="training_duration"   placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2"><span class="input-group-text" id="basic-addon2">Hari</span>
                                                 </div>
@@ -180,13 +180,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Jadwal Training -->
                                         <div class="form-group row">
                                             <input type="text"class="col-md-2 form-control"  readonly value="Jadwal Training">
                                             <div class="col-md-1"> </div>
                                             <div class="col-md-1">
-                                                
+
                                                 <input type="" readonly class="form-control" style="background-color: yellow" placeholder="Mulai">
                                             </div>
                                             <div class="col-md-7">
@@ -246,8 +246,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
-                                            
+
+
                                         <!-- Fasilitas -->
                                         <div class="form-group row">
                                             <input type="text" class="col-md-2 form-control" readonly value="Fasilitas">
@@ -265,12 +265,12 @@
                                         <div class="form-group row">
                                             <input type="text"class="col-md-2 form-control" readonly value="Biaya Pendaftaran">
                                             <div class="col-md-1"> </div>
-                                            <div class="col-md-5"> 
+                                            <div class="col-md-5">
                                                 <input type="text" class="form-control" id="registrationfee" name="registrationfee">
                                             </div>
                                         </div>
                                         <!-- Type -->
-                                        
+
                                         <div class="form-group row">
                                             <input type="text"class="col-md-2 form-control" readonly value="Type">
                                             <div class="col-md-1"> </div>
@@ -283,8 +283,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        
-                                        <!-- Lokasi -->
+
+                                        <!-- Provinsi -->
                                         <div class="form-group row">
                                             <input type="text"class="col-md-2 form-control" readonly value="Provinsi">
                                             <div class="col-md-1"> </div>
@@ -301,7 +301,7 @@
                                         <div class="form-group row">
                                             <input type="text"class="col-md-2 form-control" readonly value="Lokasi">
                                             <div class="col-md-1"> </div>
-                                            <div class="col-md-5"> 
+                                            <div class="col-md-5">
                                                 <input type="text" class="form-control" id="lokasi" name="lokasi">
                                             </div>
                                         </div>
@@ -339,38 +339,38 @@
                                     </div>
                                 </div>
                             </form>
-                            
+
                         </div>
-                
+
             </div>
                 <div class="modal fade" id="previewModal">
                     <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                    
+
                         <!-- Modal Header -->
                         <div class="modal-header">
                         <h4 class="modal-title">Modal Heading</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
-                        
+
                         <!-- Modal body -->
                         <div class="modal-body">
                             <!-- Content will be inserted here -->
                             <div class="card">
                                 <div class="card-body">
                                     <div id="modal-content">
-                                        
+
                                         <!-- Dynamically filled by JavaScript -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Modal footer -->
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
-                        
+
                     </div>
                     </div>
               </div>
@@ -384,7 +384,7 @@
                         <p>Data berhasil disimpan</p>
                         </div>
                     </div>
-                    </div> 
+                    </div>
                 </div>
                 <!-- Failed Modal -->
                 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -395,7 +395,7 @@
                             <br>
                             <p id="error-message"></p>
                         </div>
-                    
+
                     </div>
                     </div>
                 </div>
@@ -405,7 +405,7 @@
                     </div>
                 </div>
         </div>
-       
+
     </section>
 </div>
 
@@ -438,7 +438,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         var registrationFeeInput = document.getElementById('registrationfee');
-        
+
         registrationFeeInput.addEventListener('keyup', function(e) {
             // Gunakan fungsi formatRupiah untuk memformat inputan
             registrationFeeInput.value = formatRupiah(this.value, 'Rp');
@@ -503,7 +503,7 @@
         $('.fasilitas').each(function() {
             formData.fasilitas.push($(this).val());
         });
-        
+
         $('#modal-content').html(`
             <div class="form-group row">
                 <label>Nama Training</label>
@@ -647,7 +647,7 @@
         for (let i = currentYear; i <= currentYear + 10; i++) {
             $('select[name="jadwal_mulai_tahun"], select[name="jadwal_selesai_tahun"]').append(`<option value="${i}">${i}</option>`);
         }
-        
+
         $('#pending-btn').click(function() {
             submitFormWithStatus(2);
         });
@@ -704,7 +704,7 @@
                 }
             });
         }
-        
+
     });
 </script>
 

@@ -18,11 +18,10 @@ use App\Models\M_Fee_JobVacancyeModel;
 use App\Models\M_Saralry_JobVacancyeModel;
 use App\Models\M_Sector_JobVacancyeModel;
 use App\Models\M_WorkLocation_JobVacancyeModel;
-
-
 use App\Models\ListItemDetail;
 use App\Models\MasterTipeModel;
 use App\Models\ListItemModel;
+use App\Models\M_ProvinsiModel;
 use App\Models\LogApp;
 use App\Models\MenuModel;
 use App\Models\SideListModel;
@@ -64,7 +63,7 @@ class JobVacancyController extends Controller
         $data['title']      = 'Job Vacancy | Pages';
         $data['title_page'] = 'Job Vacancy | ' . $data['menus']->menu_name;
         $data['menu']       = MenuModel::all();
-   
+
         return view('pages.jobvacancy', $data);
     }
 
@@ -79,7 +78,7 @@ class JobVacancyController extends Controller
         ->leftjoin('m_experience_level', 'm_experience_level.id', '=', 'djv_job_vacancy_detail.id_m_experience_level')
         ->select(
             'djv_job_vacancy_detail.*',
-            DB::raw('CASE 
+            DB::raw('CASE
             WHEN djv_job_vacancy_detail.status = 1 THEN "Publish"
             WHEN djv_job_vacancy_detail.status = 2 THEN "Pending"
             WHEN djv_job_vacancy_detail.status = 3 THEN "Non Publish"
@@ -96,10 +95,10 @@ class JobVacancyController extends Controller
         )
         ->distinct()
         ->get();
-    
+
         return response()->json($filters);
     }
-    
+
     public function getDataJobFilter(Request $request) {
         // Membuat query untuk tabel training_course_detail
         //dd($request->all());
@@ -121,7 +120,7 @@ class JobVacancyController extends Controller
             'm_education.nama as education',
             'm_experience_level.nama as experience_level'
         );
-        
+
         // Menerapkan filter berdasarkan parameter yang tersedia
         if ($request->has('job_title') && $request->job_title != '') {
             $query->where('djv_job_vacancy_detail.job_title', 'LIKE', '%' . $request->job_title . '%');
@@ -162,7 +161,7 @@ class JobVacancyController extends Controller
                 $query->where('djv_job_vacancy_detail.status',0);
             }
         }
-    
+
         // Mengambil hasil query
         $jobvacancy = $query->get();
         //dd($jobvacancy);
@@ -177,8 +176,8 @@ class JobVacancyController extends Controller
         $data['title_page'] = 'Job Vacancy | ' . $data['menus']->menu_name;
         $data['menu']       = MenuModel::all();
         $data['liscategory'] = JobVacancyModel::all();
+        $data['listprovinsi'] = M_ProvinsiModel::all();
 
-        
         $data['listemployeestatus'] = M_Employee_Status_JobVacancyeModel::all();
         $data['listworklocation'] = M_WorkLocation_JobVacancyeModel::all();
         $data['listsalary'] = M_Saralry_JobVacancyeModel::all();
@@ -186,28 +185,48 @@ class JobVacancyController extends Controller
         $data['listsector'] = M_Sector_JobVacancyeModel::all();
         $data['listeducation'] = M_Education_JobVacancyeModel::all();
         $data['listexperiencelevel'] = M_Eperience_Level_JobVacancyeModel::all();
-        
+
         return view('pages.jobvacancy_store', $data);
     }
 
     public function storeJobVacancy(Request $req)
     {
-        
-        $jadwalMulai = Carbon::createFromDate(
-            $req->jadwal_mulai_tahun,
-            $req->jadwal_mulai_bulan,
-            $req->jadwal_mulai_tanggal
-        )->toDateString();
-    
-        $jadwalSelesai = Carbon::createFromDate(
-            $req->jadwal_selesai_tahun,
-            $req->jadwal_selesai_bulan,
-            $req->jadwal_selesai_tanggal
-        )->toDateString();
-       
+
+            $jadwalMulai = Carbon::createFromDate(
+                $req->jadwal_mulai_tahun,
+                $req->jadwal_mulai_bulan,
+                $req->jadwal_mulai_tanggal
+            )->toDateString();
+
+            $jadwalSelesai = Carbon::createFromDate(
+                $req->jadwal_selesai_tahun,
+                $req->jadwal_selesai_bulan,
+                $req->jadwal_selesai_tanggal
+            )->toDateString();
+            $idProvinsi = $req->provinsi === 'Pilih Provinsi' ? 0 : $req->provinsi;
+
+            if (!is_null($req->file('photo'))) {
+                $ext                    =  $req->file('photo')->extension();
+                $filename               = uniqid() . '.' . $req->file('photo')->getClientOriginalExtension();
+
+                    $manager                = new ImageManager();
+                    $img                    = $manager->make($req->file('photo')->getPathname());
+                    if ($ext == 'png' || $ext == 'PNG') {
+                        $filename = uniqid() . '.' . 'webp';
+                    }
+                    $img->save(public_path('storage') . '/'  . $filename, 80);
+
+                    if (env('PLATFORM_NAME') !== 'windows') {
+                        //SFTP
+                        Storage::disk('sftp')->put('/' . $filename, $img);
+                    } else {
+                        Storage::disk('windows_uploads')->put('/' . $filename, $img);
+                    }
+            }
         try {
 
             $listItem = new JobVacancyDetailModel();
+            $listItem->companyName                = $req->companyName;
             $listItem->job_title                = $req->jobTitle;
             $listItem->id_m_employee_status     = $req->employmentStatus;
             $listItem->id_m_work_location       = $req->workLocation;
@@ -216,23 +235,27 @@ class JobVacancyController extends Controller
             $listItem->id_m_sector              = $req->sector;
             $listItem->id_m_education           = $req->education;
             $listItem->id_m_experience_level    = $req->experienceLevel;
+            $listItem->id_provinsi              = $idProvinsi;
+            $listItem->lokasi                    = $req->lokasi;
             $listItem->posted_date              = $jadwalMulai;
             $listItem->close_date               = $jadwalSelesai;
             $listItem->sertifikasi              = $req->certification;
+            $listItem->linkpendaftaran          = $req->link_pendaftaran;
             $listItem->generatenumber           = $this->generateNumber(); // Generate the number
-         
+
             $listItem->status                   = $req->status;
+            $listItem->file                      = $filename;
             $listItem->job_description      = (new HelperController)->scriptStripper( $req->jobdescripsi ?? '-');
             $listItem->skill_requirment      = (new HelperController)->scriptStripper( $req->skillRequirement ?? '-');
-          
+
             $listItem->insert_by = session()->get('id');
             $listItem->updated_by = session()->get('id');
             $listItem->updated_by_ip = $req->ip();
-            
+
 
             $listItem->save();
 
-            
+
 
             $response = [
                 'status' => 'success',
@@ -256,7 +279,7 @@ class JobVacancyController extends Controller
         return json_encode($response);
     }
 
-    
+
     public function editJobVacancy($id)
     {
         $data['menus'] = MenuModel::find(34);
@@ -264,7 +287,7 @@ class JobVacancyController extends Controller
         $data['title_page'] = 'Pelatihan / Kursus | ' . $data['menus']->menu_name;
         $data['content'] = base64_decode($id);
         $data['menu']       = MenuModel::all();
-     
+        $data['listprovinsi'] = M_ProvinsiModel::all();
         $data['listemployeestatus'] = M_Employee_Status_JobVacancyeModel::all();
         $data['listworklocation'] = M_WorkLocation_JobVacancyeModel::all();
         $data['listsalary'] = M_Saralry_JobVacancyeModel::all();
@@ -272,7 +295,7 @@ class JobVacancyController extends Controller
         $data['listsector'] = M_Sector_JobVacancyeModel::all();
         $data['listeducation'] = M_Education_JobVacancyeModel::all();
         $data['listexperiencelevel'] = M_Eperience_Level_JobVacancyeModel::all();
-        
+
         $data['databyid'] = DB::table('djv_job_vacancy_detail')
         ->leftjoin('m_employee_status', 'djv_job_vacancy_detail.id_m_employee_status', '=', 'm_employee_status.id')
         ->leftjoin('m_work_location', 'm_work_location.id', '=', 'djv_job_vacancy_detail.id_m_work_location')
@@ -281,12 +304,12 @@ class JobVacancyController extends Controller
         ->leftjoin('m_sector', 'm_sector.id', '=', 'djv_job_vacancy_detail.id_m_sector')
         ->leftjoin('m_education', 'm_education.id', '=', 'djv_job_vacancy_detail.id_m_education')
         ->leftjoin('m_experience_level', 'm_experience_level.id', '=', 'djv_job_vacancy_detail.id_m_experience_level')
-        ->select('djv_job_vacancy_detail.*')->where('djv_job_vacancy_detail.id',base64_decode($id))->first(); 
+        ->select('djv_job_vacancy_detail.*')->where('djv_job_vacancy_detail.id',base64_decode($id))->first();
         $dt_list_item =  JobVacancyDetailModel::where('id',base64_decode($id))->first();
-            
+
             $data['posted_date']  = Carbon::parse($dt_list_item->posted_date)->format('Y-m-d-');
             $data['close_date']  = Carbon::parse($dt_list_item->close_date)->format('Y-m-d');
-    
+
         $data['iddtl']=base64_decode($id);
 
         return view('pages.jobvacancy_edit', $data);
@@ -295,22 +318,45 @@ class JobVacancyController extends Controller
 
     public function updateJobVacancy(Request $req)
     {
-       
+
         try {
-            
+
             $jadwalMulai = Carbon::createFromDate(
                 $req->jadwal_mulai_tahun,
                 $req->jadwal_mulai_bulan,
                 $req->jadwal_mulai_tanggal
             )->toDateString();
-        
+
             $jadwalSelesai = Carbon::createFromDate(
                 $req->jadwal_selesai_tahun,
                 $req->jadwal_selesai_bulan,
                 $req->jadwal_selesai_tanggal
             )->toDateString();
-            
+            $idProvinsi = $req->provinsi === 'Pilih Provinsi' ? 0 : $req->provinsi;
+
+            if (!is_null($req->file('photo'))) {
+                $ext                    =  $req->file('photo')->extension();
+                $filename               = uniqid() . '.' . $req->file('photo')->getClientOriginalExtension();
+
+                $manager                = new ImageManager();
+                $img                    = $manager->make($req->file('photo')->getPathname());
+                if ($ext == 'png' || $ext == 'PNG') {
+                    $filename = uniqid() . '.' . 'webp';
+                }
+                $img->save(public_path('storage') . '/'  . $filename, 80);
+
+                if (env('PLATFORM_NAME') !== 'windows') {
+                    //SFTP
+                    Storage::disk('sftp')->put('/' . $filename, $img);
+                } else {
+                    Storage::disk('windows_uploads')->put('/' . $filename, $img);
+                }
+            }
             $listItem = JobVacancyDetailModel::find($req->iddtl);
+            $listItem->companyName                = $req->companyName;
+            $listItem->id_provinsi              = $idProvinsi;
+            $listItem->lokasi                    = $req->lokasi;
+            $listItem->linkpendaftaran          = $req->link_pendaftaran;
             $listItem->job_title                = $req->jobTitle;
             $listItem->id_m_employee_status     = $req->employmentStatus;
             $listItem->id_m_work_location       = $req->workLocation;
@@ -322,15 +368,15 @@ class JobVacancyController extends Controller
             $listItem->posted_date              = $jadwalMulai;
             $listItem->close_date               = $jadwalSelesai;
             $listItem->sertifikasi              = $req->certification;
-         
+            $listItem->file                      = $filename;
             $listItem->status                   = $req->status;
             $listItem->job_description      = (new HelperController)->scriptStripper( $req->jobdescripsi ?? '-');
             $listItem->skill_requirment      = (new HelperController)->scriptStripper( $req->skillRequirement ?? '-');
-          
+
             $listItem->insert_by = session()->get('id');
             $listItem->updated_by = session()->get('id');
             $listItem->updated_by_ip = $req->ip();
-            
+
             $listItem->save();
 
             $response = [
@@ -358,12 +404,11 @@ class JobVacancyController extends Controller
 
     public function stopJobvacancy ($id)
     {
-        
+
         $listItem = TraningCourseDetailsModel::find($id);
             $listItem->status                       = 3;
             $listItem->insert_by                    = session()->get('id');
             $listItem->updated_by                   = session()->get('id');
-            $listItem->updated_by_ip                = $req->ip();
             $listItem->save();
         $response = [
             'status' => 'success',
@@ -374,7 +419,7 @@ class JobVacancyController extends Controller
 
     public function PopUpJobVacancyDetail($id)
     {
-       
+
         try {
                 $dt_list_item =  JobVacancyDetailModel::find($id);
                 $output = View::make("components.job-vacancy-component")
@@ -398,7 +443,7 @@ class JobVacancyController extends Controller
         }
         return json_encode($response);
     }
-    
+
 
     public function deleteJobVacancyDetail($id, Request $req)
     {

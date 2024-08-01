@@ -246,12 +246,12 @@ class NewsUpdateController extends Controller
                         }
                         $listItem = new NewsFilesModel() ;
                         //dd($listItem);
-                        $datapenulis->id_news_dtl = $req->iddtl;
-                        $datapenulis->nama = $filenamepenulis;
-                        $datapenulis->insert_by = session()->get('id');
-                        $datapenulis->updated_by = session()->get('id');
-                        $datapenulis->updated_by_ip = $req->ip();
-                        $datapenulis->save();
+                        $listItem->id_news_dtl = $req->iddtl;
+                        $listItem->nama = $filenamepenulis;
+                        $listItem->insert_by = session()->get('id');
+                        $listItem->updated_by = session()->get('id');
+                        $listItem->updated_by_ip = $req->ip();
+                        $listItem->save();
                    
                 }
             }
